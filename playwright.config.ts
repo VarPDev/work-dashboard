@@ -17,6 +17,9 @@ export default defineConfig({
   use: {
     baseURL: 'http://127.0.0.1:3100',
     trace: 'retain-on-failure',
+    // The UI follows the browser language; pin it so the assertions can be
+    // written against one language, with a separate test for switching.
+    locale: 'it-IT',
   },
   projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
   webServer: {

@@ -16,8 +16,10 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { BoardFilter } from '@/components/dashboard/board-filter';
 import { DashboardSkeleton } from '@/components/dashboard/dashboard-skeleton';
+import { LocalePicker } from '@/components/dashboard/locale-picker';
 import { TaskRow } from '@/components/dashboard/task-row';
 import { useDismissals } from '@/components/dashboard/use-dismissals';
+import { useI18n } from '@/components/dashboard/use-i18n';
 import { ThemeToggle } from '@/components/dashboard/theme-toggle';
 import { UserPicker } from '@/components/dashboard/user-picker';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -33,20 +35,16 @@ import type {
   UsersResponse,
 } from '@/lib/dashboard-types';
 import { isDismissed } from '@/lib/dismissals';
-import { formatAge, formatClockTime, plural } from '@/lib/format';
+import { formatAge, formatClockTime } from '@/lib/format';
 import { boardFacets } from '@/lib/grouping';
+import type { Messages } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
 type Filter = 'all' | 'assigned' | 'mentions' | 'overdue';
 
-const FILTERS: { id: Filter; label: string }[] = [
-  { id: 'all', label: 'Tutte' },
-  { id: 'assigned', label: 'Assegnate' },
-  { id: 'mentions', label: 'Menzioni' },
-  { id: 'overdue', label: 'Scadute' },
-];
+const FILTER_IDS: Filter[] = ['all', 'assigned', 'mentions', 'overdue'];
 
-/** Past this age the label turns amber, as a nudge to press Aggiorna. */
+/** Past this age the label turns amber, as a nudge to hit refresh. */
 const STALE_AFTER_MINUTES = 15;
 
 function matchesFilter(item: DashboardItem, filter: Filter): boolean {
@@ -70,13 +68,23 @@ function isApiError(value: unknown): value is ApiError {
   return typeof value === 'object' && value !== null && 'error' in value;
 }
 
+/**
+ * Errors arrive with a code; the wording comes from the messages, so it follows
+ * the reader's language rather than the server's.
+ */
+function errorText(error: ApiError['error'] | string, t: Messages): string {
+  if (typeof error === 'string') return error;
+  return t.errors.byCode[error.code] ?? error.message;
+}
+
 export function DashboardView() {
+  const { locale, tag, t, setLocale } = useI18n();
   const router = useRouter();
   const searchParams = useSearchParams();
   const requestedUser = searchParams.get('user');
 
   const [directory, setDirectory] = useState<UsersResponse | null>(null);
-  const [directoryError, setDirectoryError] = useState<string | null>(null);
+  const [directoryError, setDirectoryError] = useState<ApiError['error'] | string | null>(null);
 
   /**
    * The result is stored together with the user it was fetched for. Anything
@@ -87,7 +95,9 @@ export function DashboardView() {
   const [result, setResult] = useState<{
     requested: string | null;
     payload?: DashboardPayload;
-    error?: string;
+    // Either a typed API error, so it can be translated by code, or a raw
+    // network failure message.
+    error?: ApiError['error'] | string;
   } | null>(null);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -113,7 +123,7 @@ export function DashboardView() {
         const body = await readJson<UsersResponse>(response);
         if (cancelled) return;
 
-        if (isApiError(body)) setDirectoryError(body.error.message);
+        if (isApiError(body)) setDirectoryError(body.error);
         else setDirectory(body);
       } catch (error) {
         if (!cancelled) setDirectoryError(error instanceof Error ? error.message : String(error));
@@ -137,7 +147,7 @@ export function DashboardView() {
         if (options.isCancelled?.()) return null;
 
         if (isApiError(body)) {
-          setResult({ requested: requestedUser, error: body.error.message });
+          setResult({ requested: requestedUser, error: body.error });
           return null;
         }
 
@@ -256,9 +266,10 @@ export function DashboardView() {
     <TooltipProvider delayDuration={200}>
       <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-4 p-4">
         <header className="flex flex-wrap items-center gap-3">
-          <h1 className="text-base font-semibold tracking-tight">Cosa devo fare adesso</h1>
+          <h1 className="text-base font-semibold tracking-tight">{t.title}</h1>
 
           <UserPicker
+            t={t}
             users={directory?.users ?? []}
             selected={selectedUser}
             defaultAccountId={directory?.defaultAccountId ?? null}
@@ -270,14 +281,14 @@ export function DashboardView() {
             <div className="flex items-center gap-2 text-xs">
               <Badge variant="secondary" className="h-6 gap-1 px-2">
                 <Inbox className="size-3" />
-                {plural(totals.assigned, 'assegnata', 'assegnate')}
+                {t.totals.assigned(totals.assigned)}
               </Badge>
               <Badge
                 variant="outline"
                 className="h-6 gap-1 border-violet-500/40 bg-violet-500/10 px-2 text-violet-700 dark:text-violet-300"
               >
                 <AtSign className="size-3" />
-                {plural(totals.mentions, 'menzione', 'menzioni')}
+                {t.totals.mentions(totals.mentions)}
               </Badge>
               <Badge
                 variant="outline"
@@ -289,7 +300,7 @@ export function DashboardView() {
                 )}
               >
                 <CalendarX2 className="size-3" />
-                {plural(totals.overdue, 'scaduta', 'scadute')}
+                {t.totals.overdue(totals.overdue)}
               </Badge>
             </div>
           ) : null}
@@ -297,15 +308,15 @@ export function DashboardView() {
           <div className="ml-auto flex items-center gap-2">
             {payload ? (
               <span className="text-xs text-muted-foreground">
-                aggiornato {formatClockTime(payload.generatedAt)}
+                {t.header.updatedAt(formatClockTime(payload.generatedAt, tag))}
                 <span className="mx-1 opacity-40">·</span>
                 {/* The payload is cached for half an hour, so how old it is
                     matters more than when it was taken. */}
                 <span className={cn(ageMinutes >= STALE_AFTER_MINUTES && 'text-amber-700 dark:text-amber-300')}>
-                  {formatAge(payload.generatedAt, now)}
+                  {formatAge(payload.generatedAt, tag, t.header.ageNow, now)}
                 </span>
                 <span className="mx-1 opacity-40">·</span>
-                {plural(payload.diagnostics.jiraCalls, 'chiamata Jira', 'chiamate Jira')}
+                {t.header.jiraCalls(payload.diagnostics.jiraCalls)}
               </span>
             ) : null}
             <Button
@@ -315,9 +326,10 @@ export function DashboardView() {
               disabled={loading || refreshing}
             >
               <RefreshCw className={cn('size-3.5', refreshing && 'animate-spin')} />
-              Aggiorna
+              {t.header.refresh}
             </Button>
-            <ThemeToggle />
+            <LocalePicker locale={locale} t={t} onSelect={setLocale} />
+            <ThemeToggle t={t} />
           </div>
         </header>
 
@@ -325,13 +337,13 @@ export function DashboardView() {
           <Alert className="border-amber-500/40 bg-amber-500/10">
             <UserCheck className="size-4 text-amber-600 dark:text-amber-300" />
             <AlertTitle className="text-amber-800 dark:text-amber-200">
-              Stai vedendo il carico di {payload.user.displayName}
+              {t.viewing.title(payload.user.displayName)}
             </AlertTitle>
             <AlertDescription className="flex flex-wrap items-center gap-3 text-amber-800/90 dark:text-amber-200/80">
-              Nessuno di questi task è tuo.
+              {t.viewing.notYours}
               <Button variant="secondary" size="sm" onClick={() => router.push('/')}>
                 <ArrowLeft className="size-3.5" />
-                Torna ai miei
+                {t.viewing.backToMine}
               </Button>
             </AlertDescription>
           </Alert>
@@ -340,21 +352,21 @@ export function DashboardView() {
         {directoryError ? (
           <Alert variant="destructive">
             <AlertTriangle className="size-4" />
-            <AlertTitle>Elenco utenti non disponibile</AlertTitle>
-            <AlertDescription>{directoryError}</AlertDescription>
+            <AlertTitle>{t.picker.directoryUnavailable}</AlertTitle>
+            <AlertDescription>{errorText(directoryError, t)}</AlertDescription>
           </Alert>
         ) : null}
 
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap items-center gap-2">
-            {FILTERS.map((entry) => (
+            {FILTER_IDS.map((id) => (
               <Button
-                key={entry.id}
-                variant={filter === entry.id ? 'secondary' : 'ghost'}
+                key={id}
+                variant={filter === id ? 'secondary' : 'ghost'}
                 size="sm"
-                onClick={() => setFilter(entry.id)}
+                onClick={() => setFilter(id)}
               >
-                {entry.label}
+                {t.filters[id]}
               </Button>
             ))}
 
@@ -362,8 +374,8 @@ export function DashboardView() {
               <>
                 <Separator orientation="vertical" className="mx-1 h-5" />
                 <span className="text-xs text-muted-foreground">
-                  {plural(visibleItems.length, 'elemento', 'elementi')}
-                  {visibleItems.length !== kept.length ? ` su ${kept.length}` : ''}
+                  {t.list.itemCount(visibleItems.length)}
+                  {visibleItems.length !== kept.length ? t.list.ofTotal(kept.length) : ''}
                 </span>
               </>
             ) : null}
@@ -371,6 +383,7 @@ export function DashboardView() {
 
           {payload ? (
             <BoardFilter
+              t={t}
               boards={boards}
               selected={boardFilter}
               onToggle={(boardId) =>
@@ -389,29 +402,27 @@ export function DashboardView() {
         {taskError ? (
           <Alert variant="destructive">
             <AlertTriangle className="size-4" />
-            <AlertTitle>Non riesco a caricare le attività</AlertTitle>
+            <AlertTitle>{t.errors.loadFailed}</AlertTitle>
             <AlertDescription className="flex flex-wrap items-center gap-3">
-              {taskError}
+              {errorText(taskError, t)}
               <Button variant="secondary" size="sm" onClick={() => void loadTasks()}>
-                Riprova
+                {t.errors.retry}
               </Button>
             </AlertDescription>
           </Alert>
         ) : null}
 
-        {loading ? <DashboardSkeleton /> : null}
+        {loading ? <DashboardSkeleton label={t.list.loading} /> : null}
 
         {!loading && !taskError && payload && visibleItems.length === 0 ? (
           <div className="rounded-md border border-dashed border-border px-6 py-16 text-center">
             <p className="font-medium">
-              {payload.items.length === 0
-                ? 'Niente da fare. Davvero niente.'
-                : 'Nessun elemento con questi filtri.'}
+              {payload.items.length === 0 ? t.list.nothingAtAll : t.list.noneWithFilters}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
               {payload.items.length === 0
-                ? `Nessuna issue assegnata e nessuna menzione in attesa per ${payload.user.displayName}.`
-                : 'Allarga il filtro, o togli la selezione delle board.'}
+                ? t.list.nothingAtAllFor(payload.user.displayName)
+                : t.list.widenFilters}
             </p>
           </div>
         ) : null}
@@ -419,7 +430,13 @@ export function DashboardView() {
         {!loading && !taskError && visibleItems.length > 0 ? (
           <div className="overflow-hidden rounded-md border border-border bg-card">
             {visibleItems.map((item) => (
-              <TaskRow key={`${item.kind}:${item.issue.key}`} item={item} onDismiss={dismiss} />
+              <TaskRow
+                key={`${item.kind}:${item.issue.key}`}
+                item={item}
+                t={t}
+                tag={tag}
+                onDismiss={dismiss}
+              />
             ))}
           </div>
         ) : null}
@@ -430,15 +447,14 @@ export function DashboardView() {
             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <EyeOff className="size-3.5" />
               <span>
-                {plural(hiddenItems.length, 'menzione nascosta', 'menzioni nascoste')} fino al
-                prossimo commento
+                {t.hidden.count(hiddenItems.length)}
               </span>
               <Button variant="ghost" size="sm" onClick={() => setShowHidden((show) => !show)}>
-                {showHidden ? 'Nascondi' : 'Mostra'}
+                {showHidden ? t.hidden.conceal : t.hidden.show}
               </Button>
               <Button variant="ghost" size="sm" onClick={restoreAll}>
                 <Undo2 className="size-3" />
-                Ripristina tutte
+                {t.hidden.restoreAll}
               </Button>
             </div>
 
@@ -448,6 +464,8 @@ export function DashboardView() {
                   <TaskRow
                     key={`hidden:${item.issue.key}`}
                     item={item}
+                    t={t}
+                    tag={tag}
                     dismissed
                     onRestore={restore}
                   />
@@ -457,34 +475,35 @@ export function DashboardView() {
           </div>
         ) : null}
 
-        {payload ? <Diagnostics payload={payload} /> : null}
+        {payload ? <Diagnostics payload={payload} t={t} /> : null}
       </div>
     </TooltipProvider>
   );
 }
 
 /** Quiet footer: the numbers that explain a surprising screen. */
-function Diagnostics({ payload }: { payload: DashboardPayload }) {
+function Diagnostics({ payload, t }: { payload: DashboardPayload; t: Messages }) {
   const { diagnostics } = payload;
 
   return (
     <footer className="mt-2 flex flex-wrap gap-x-4 gap-y-1 border-t border-border/60 pt-3 text-[11px] text-muted-foreground">
       <span>
-        menzioni: {diagnostics.mentionCandidates} candidate, {diagnostics.mentionsAlreadyAnswered}{' '}
-        già risposte, {diagnostics.mentionsInformationalOnly} solo per conoscenza,{' '}
-        {diagnostics.mentionFalsePositives} falsi positivi
+        {t.diagnostics.mentions({
+          candidates: diagnostics.mentionCandidates,
+          answered: diagnostics.mentionsAlreadyAnswered,
+          informational: diagnostics.mentionsInformationalOnly,
+          falsePositives: diagnostics.mentionFalsePositives,
+        })}
       </span>
-      <span>
-        board: {diagnostics.boardsQueried}/{diagnostics.boardsTotal} interrogate
-      </span>
+      <span>{t.diagnostics.boards(diagnostics.boardsQueried, diagnostics.boardsTotal)}</span>
       {diagnostics.failedBoards.length ? (
         <span className="text-amber-700 dark:text-amber-400">
-          board non interrogabili: {diagnostics.failedBoards.join(', ')}
+          {t.diagnostics.failedBoards(diagnostics.failedBoards.join(', '))}
         </span>
       ) : null}
       {diagnostics.truncatedThreads.length ? (
         <span className="text-amber-700 dark:text-amber-400">
-          thread troppo lunghi per essere scansionati: {diagnostics.truncatedThreads.join(', ')}
+          {t.diagnostics.truncatedThreads(diagnostics.truncatedThreads.join(', '))}
         </span>
       ) : null}
     </footer>

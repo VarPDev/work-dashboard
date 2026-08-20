@@ -4,9 +4,11 @@ import { FolderOpen, LayoutList, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import type { BoardFacet } from '@/lib/dashboard-types';
+import type { Messages } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
 type BoardFilterProps = {
+  t: Messages;
   boards: BoardFacet[];
   /** Empty means no board filter at all, which shows everything. */
   selected: Set<string>;
@@ -18,12 +20,14 @@ type BoardFilterProps = {
  * Multi-select chips, one per board present in the list. Additive: picking two
  * boards shows both, picking none shows everything.
  */
-export function BoardFilter({ boards, selected, onToggle, onClear }: BoardFilterProps) {
+export function BoardFilter({ t, boards, selected, onToggle, onClear }: BoardFilterProps) {
   if (boards.length === 0) return null;
 
   return (
     <div className="flex flex-wrap items-center gap-1.5">
-      <span className="mr-1 text-[11px] uppercase tracking-wide text-muted-foreground">board</span>
+      <span className="mr-1 text-[11px] uppercase tracking-wide text-muted-foreground">
+        {t.boards.label}
+      </span>
 
       {boards.map((board) => {
         const active = selected.has(board.id);
@@ -49,7 +53,9 @@ export function BoardFilter({ boards, selected, onToggle, onClear }: BoardFilter
             ) : (
               <FolderOpen className="size-3 shrink-0 text-amber-600 dark:text-amber-400/80" />
             )}
-            <span className="max-w-[16rem] truncate">{board.label}</span>
+            <span className="max-w-[16rem] truncate">
+              {board.kind === 'board' ? board.label : t.row.boardless(board.label)}
+            </span>
             <span className="font-mono text-[10px] opacity-70">{board.count}</span>
             {board.overdueCount > 0 ? (
               <span className="rounded-full bg-red-500/20 px-1 font-mono text-[10px] text-red-700 dark:text-red-300">
@@ -63,7 +69,7 @@ export function BoardFilter({ boards, selected, onToggle, onClear }: BoardFilter
       {selected.size > 0 ? (
         <Button variant="ghost" size="sm" onClick={onClear}>
           <X className="size-3" />
-          Tutte le board
+          {t.boards.clear}
         </Button>
       ) : null}
     </div>

@@ -3,7 +3,7 @@
  * from. Pure functions — the Jira calls happen in lib/jira/boards.ts.
  */
 
-import { BOARDLESS_GROUP_PREFIX, BOARD_PRIORITY } from '@/config/boards';
+import { BOARD_PRIORITY } from '@/config/boards';
 import type { ItemBoard, BoardFacet } from '@/lib/dashboard-types';
 import type { JiraBoard, JiraIssue } from '@/lib/jira/types';
 
@@ -39,7 +39,8 @@ export function pickBoard(
 
 /**
  * The board an issue is shown under. Issues on no board fall back to their
- * project, labelled as such rather than quietly passed off as a board.
+ * project: the label carries the project name and `kind` says it is not a board,
+ * so the UI can word it in whatever language is active.
  */
 export function boardOf(
   issue: JiraIssue,
@@ -50,11 +51,7 @@ export function boardOf(
   if (board) return { id: `board:${board.id}`, label: board.name, kind: 'board' };
 
   const project = issue.fields.project;
-  return {
-    id: `project:${project.key}`,
-    label: `${BOARDLESS_GROUP_PREFIX} — ${project.name}`,
-    kind: 'project',
-  };
+  return { id: `project:${project.key}`, label: project.name, kind: 'project' };
 }
 
 /**

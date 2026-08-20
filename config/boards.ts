@@ -30,6 +30,3 @@ export const BOARD_PRIORITY: string[] = [];
  * a cross-project board.
  */
 export const RESTRICT_BOARDS_TO_ISSUE_PROJECTS = true;
-
-/** Label for the fallback group holding issues that are on no board. */
-export const BOARDLESS_GROUP_PREFIX = 'Senza board';

@@ -55,6 +55,12 @@ Jira, authentication and sessions, a database, deployment configuration, and
 abstraction layers added in anticipation of features that do not exist yet.
 [NOTES.md](NOTES.md) lists what is deliberately not implemented.
 
+**Adding a language.** Copy `lib/i18n/it.ts`, translate every value, register it
+in `lib/i18n/index.ts` (the locale list, the message map and the Intl tag). The
+`Messages` type makes a missing key a compile error, and a unit test checks that
+no dictionary has extra or empty ones. Keep count-dependent strings as functions:
+plural rules are not the same everywhere.
+
 **Configuration goes in `config/`.** Tunables — the mention window, the caps, the
 priority order, the board tie-break — belong there with a comment explaining the
 trade-off, not scattered as literals.

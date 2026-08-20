@@ -1,9 +1,9 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
 /** Shape of the real thing, so the page does not jump when data lands. */
-export function DashboardSkeleton() {
+export function DashboardSkeleton({ label }: { label: string }) {
   return (
-    <div className="space-y-3" aria-busy="true" aria-label="Caricamento attività">
+    <div className="space-y-3" aria-busy="true" aria-label={label}>
       {[6, 4, 3].map((rows, groupIndex) => (
         <div key={groupIndex} className="overflow-hidden rounded-md border border-border bg-card">
           <div className="flex items-center gap-2 px-3 py-2">

@@ -28,6 +28,9 @@ Runs on `localhost` only, for one person, with one API token. There is no login
 and no multi-user support, by design — see
 [what would break if this were deployed](NOTES.md).
 
+Available in **Italian, English and German**: the interface follows your browser's
+language, and a picker in the header overrides it.
+
 Contributions are welcome; start with [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Requirements
@@ -100,12 +103,14 @@ lib/cache.ts        -> in-memory TTL cache, keyed by accountId
 lib/dismissals      -> the hide-until-next-comment rule
 lib/dismissals-store -> where hidden rows are written (data/dismissals.json)
 lib/theme*          -> the light/dark choice, and the script that applies it
+lib/i18n/*          -> the message dictionaries, and how a locale is chosen
 config/*            -> the knobs: window, caps, board priority, priority order
 ```
 
 The browser only imports types and pure helpers — `lib/dashboard-types.ts`,
-`lib/dismissals.ts`, `lib/grouping.ts`, `lib/format.ts`, `lib/theme*.ts`. None of
-them read the environment, so credentials cannot reach the bundle.
+`lib/dismissals.ts`, `lib/grouping.ts`, `lib/format.ts`, `lib/theme*.ts`,
+`lib/i18n/*`. None of them read the environment, so credentials cannot reach the
+bundle.
 
 ## Assumptions this app makes
 

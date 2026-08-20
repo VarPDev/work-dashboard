@@ -14,6 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import type { DashboardItem } from '@/lib/dashboard-types';
 import { formatDueDate, formatRelative, initials } from '@/lib/format';
+import type { Messages } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
 /** Priority tint. Ranking lives on the server; this is only colour. */
@@ -35,13 +36,16 @@ const STATUS_STYLES: Record<string, string> = {
 
 type TaskRowProps = {
   item: DashboardItem;
+  t: Messages;
+  /** BCP 47 tag for dates and relative times. */
+  tag: string;
   /** Shown dimmed, with a restore button, when the row is a dismissed one. */
   dismissed?: boolean;
   onDismiss?: (item: DashboardItem) => void;
   onRestore?: (issueKey: string) => void;
 };
 
-export function TaskRow({ item, dismissed = false, onDismiss, onRestore }: TaskRowProps) {
+export function TaskRow({ item, t, tag, dismissed = false, onDismiss, onRestore }: TaskRowProps) {
   const { issue, mention } = item;
   const canDismiss = item.kind === 'mention';
 
@@ -62,7 +66,7 @@ export function TaskRow({ item, dismissed = false, onDismiss, onRestore }: TaskR
                 <AtSign className="size-3" />
               </span>
             </TooltipTrigger>
-            <TooltipContent>Menzione senza risposta</TooltipContent>
+            <TooltipContent>{t.row.mentionBadge}</TooltipContent>
           </Tooltip>
         ) : (
           <Tooltip>
@@ -71,7 +75,7 @@ export function TaskRow({ item, dismissed = false, onDismiss, onRestore }: TaskR
                 <MessageSquareReply className="size-3 rotate-180" />
               </span>
             </TooltipTrigger>
-            <TooltipContent>Assegnata</TooltipContent>
+            <TooltipContent>{t.row.assignedBadge}</TooltipContent>
           </Tooltip>
         )}
 
@@ -107,10 +111,10 @@ export function TaskRow({ item, dismissed = false, onDismiss, onRestore }: TaskR
           <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs text-muted-foreground">
             <span className="text-violet-700 dark:text-violet-300">{mention.byDisplayName}</span>
             <span className="opacity-50">·</span>
-            <span>{formatRelative(mention.at)}</span>
+            <span>{formatRelative(mention.at, tag)}</span>
             <span className="opacity-50">·</span>
             <span className="line-clamp-2 max-w-[70ch] italic">
-              {mention.text || '(commento senza testo)'}
+              {mention.text || t.row.emptyComment}
             </span>
             <a
               href={mention.commentUrl}
@@ -118,7 +122,7 @@ export function TaskRow({ item, dismissed = false, onDismiss, onRestore }: TaskR
               rel="noreferrer"
               className="inline-flex items-center gap-1 text-primary hover:underline"
             >
-              vai al commento
+              {t.row.goToComment}
               <ExternalLink className="size-3" />
             </a>
           </div>
@@ -149,13 +153,13 @@ export function TaskRow({ item, dismissed = false, onDismiss, onRestore }: TaskR
                   : 'italic text-amber-700/80 dark:text-amber-400/70',
               )}
             >
-              {item.board.label}
+              {item.board.kind === 'board' ? item.board.label : t.row.boardless(item.board.label)}
             </span>
           </TooltipTrigger>
           <TooltipContent>
             {item.board.kind === 'board'
               ? item.board.label
-              : `${item.board.label} — questa issue non sta su nessuna board`}
+              : t.row.boardlessTooltip(item.board.label)}
           </TooltipContent>
         </Tooltip>
 
@@ -172,7 +176,7 @@ export function TaskRow({ item, dismissed = false, onDismiss, onRestore }: TaskR
           </Badge>
         ) : (
           <Badge variant="outline" className="h-5 px-1.5 text-[10px] text-muted-foreground">
-            senza priorità
+            {t.row.noPriority}
           </Badge>
         )}
 
@@ -194,7 +198,7 @@ export function TaskRow({ item, dismissed = false, onDismiss, onRestore }: TaskR
           {issue.duedate ? (
             <>
               <CalendarClock className="size-3" />
-              {formatDueDate(issue.duedate)}
+              {formatDueDate(issue.duedate, tag)}
             </>
           ) : (
             <span className="opacity-40">—</span>
@@ -222,7 +226,7 @@ export function TaskRow({ item, dismissed = false, onDismiss, onRestore }: TaskR
                 ?
               </span>
             </TooltipTrigger>
-            <TooltipContent>Nessun assegnatario</TooltipContent>
+            <TooltipContent>{t.row.noAssignee}</TooltipContent>
           </Tooltip>
         )}
 
@@ -233,28 +237,28 @@ export function TaskRow({ item, dismissed = false, onDismiss, onRestore }: TaskR
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  aria-label={`Ripristina ${issue.key}`}
+                  aria-label={t.row.restoreFor(issue.key)}
                   onClick={() => onRestore?.(issue.key)}
                   className="rounded p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                   <Undo2 className="size-3.5" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent>Rimetti in lista</TooltipContent>
+              <TooltipContent>{t.row.restore}</TooltipContent>
             </Tooltip>
           ) : canDismiss ? (
             <Tooltip>
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  aria-label={`Nascondi ${issue.key}`}
+                  aria-label={t.row.hideFor(issue.key)}
                   onClick={() => onDismiss?.(item)}
                   className="rounded p-0.5 text-muted-foreground opacity-0 transition-opacity hover:bg-muted hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
                 >
                   <EyeOff className="size-3.5" />
                 </button>
               </TooltipTrigger>
-              <TooltipContent>Nascondi fino al prossimo commento</TooltipContent>
+              <TooltipContent>{t.row.hide}</TooltipContent>
             </Tooltip>
           ) : null}
         </span>

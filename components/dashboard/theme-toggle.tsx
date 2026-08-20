@@ -12,15 +12,16 @@ import {
   storeThemeMode,
   subscribeToTheme,
 } from '@/lib/theme-store';
+import type { Messages } from '@/lib/i18n';
 import { nextThemeMode, type ThemeMode } from '@/lib/theme';
 
-const LABELS: Record<ThemeMode, string> = {
-  system: 'Tema: come il sistema',
-  light: 'Tema: chiaro',
-  dark: 'Tema: scuro',
-};
+export function ThemeToggle({ t }: { t: Messages }) {
+  const labels: Record<ThemeMode, string> = {
+    system: t.theme.system,
+    light: t.theme.light,
+    dark: t.theme.dark,
+  };
 
-export function ThemeToggle() {
   const snapshot = useSyncExternalStore(
     subscribeToTheme,
     getThemeSnapshot,
@@ -42,15 +43,17 @@ export function ThemeToggle() {
           variant="ghost"
           size="sm"
           onClick={() => storeThemeMode(nextThemeMode(mode))}
-          aria-label={LABELS[mode]}
+          aria-label={labels[mode]}
           data-theme-mode={mode}
         >
           <Icon className="size-3.5" />
         </Button>
       </TooltipTrigger>
       <TooltipContent>
-        {LABELS[mode]}
-        {mode === 'system' ? ` (ora ${applied === 'dark' ? 'scuro' : 'chiaro'})` : ''}
+        {labels[mode]}
+        {mode === 'system'
+          ? ` (${applied === 'dark' ? t.theme.nowDark : t.theme.nowLight})`
+          : ''}
       </TooltipContent>
     </Tooltip>
   );

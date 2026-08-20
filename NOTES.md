@@ -141,7 +141,18 @@ integration account, not to a person. Consequences:
 - **The e2e tests hit the live Jira instance**, read-only. They assert on
   structure and behaviour, never on issue keys or counts, so they survive the
   data changing daily. They will fail without network or with a bad token.
-- The UI is **in Italian**. The theme follows the OS by default; the header
+- The UI speaks **Italian, English and German**, chosen from the browser's
+  language and overridable with the header picker; the choice is kept in
+  localStorage. Italian is the fallback for any other language. The server
+  renders the fallback first, since it cannot know the browser's preference —
+  harmless here, because the first paint is a near-textless skeleton.
+- **Dates, times and relative ages go through Intl**, so "3 giorni fa" and "vor 3
+  Tagen" are not hand-written. Counts are functions in the dictionaries, because
+  plural rules differ per language.
+- **Error messages are translated by code, not by text.** The API returns an
+  error code and an English message; the UI shows its own wording for known
+  codes and falls back to the server's text otherwise.
+- The theme follows the OS by default; the header
   button cycles system -> light -> dark and the choice is kept in localStorage
   (per browser, unlike hidden rows, which are on the server). A small inline
   script applies the class before the first paint, so there is no flash of the

@@ -98,7 +98,7 @@ describe('the board shown on a row', () => {
   it('falls back to the project and says the issue has no board', () => {
     expect(boardOf(issue('DER-1', 'DER', 'Gamma Project'), mapping)).toEqual({
       id: 'project:DER',
-      label: 'Senza board — Gamma Project',
+      label: 'Gamma Project',
       kind: 'project',
     });
   });
@@ -111,7 +111,7 @@ describe('the board shown on a row', () => {
 describe('board filter facets', () => {
   const sga = { id: 'board:75', label: 'Alpha Dev Board', kind: 'board' as const };
   const sde = { id: 'board:72', label: 'Beta Dev Board', kind: 'board' as const };
-  const orphan = { id: 'project:DER', label: 'Senza board — DER', kind: 'project' as const };
+  const orphan = { id: 'project:DER', label: 'Gamma Project', kind: 'project' as const };
 
   const items = [
     { board: sga, overdue: false },

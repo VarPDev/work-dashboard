@@ -30,8 +30,8 @@ async function selectAnotherUser(page: Page): Promise<string> {
   return label;
 }
 
-async function waitForDashboard(page: Page) {
-  await expect(page.getByRole('button', { name: /Aggiorna/ })).toBeEnabled();
+async function waitForDashboard(page: Page, refreshLabel = 'Aggiorna') {
+  await expect(page.getByRole('button', { name: new RegExp(refreshLabel) })).toBeEnabled();
   await expect(page.locator('[aria-busy="true"]')).toHaveCount(0);
 }
 
@@ -139,7 +139,9 @@ test('an unknown accountId errors instead of showing an empty dashboard', async 
   await page.goto('/?user=nope-not-an-account');
 
   await expect(page.getByText(/Non riesco a caricare le attività/)).toBeVisible();
-  await expect(page.getByText(/No Jira user matches/)).toBeVisible();
+  // The message is translated client-side from the error code, so it follows the
+  // reader's language rather than the server's.
+  await expect(page.getByText(/Nessun utente Jira corrisponde/)).toBeVisible();
   await expect(rows(page)).toHaveCount(0);
   // The empty state must not claim there is nothing to do.
   await expect(page.getByText(/Niente da fare/)).toHaveCount(0);
@@ -280,6 +282,42 @@ test.describe('theme on a light system', () => {
     // ...and back to following the system.
     await page.getByRole('button', { name: /^Tema:/ }).click();
     await expect(page.locator('html')).not.toHaveClass(/dark/);
+  });
+});
+
+test.describe('language', () => {
+  test('follows the browser language, and lets you change it', async ({ page }) => {
+    await page.goto('/');
+    await waitForDashboard(page);
+
+    // The context locale is it-IT, so Italian is what the browser asked for.
+    const picker = page.getByRole('button', { name: 'Lingua' });
+    await expect(picker).toHaveAttribute('data-locale', 'it');
+    await expect(page.getByRole('button', { name: 'Menzioni', exact: true })).toBeVisible();
+
+    await picker.click();
+    await page.locator('[data-locale-option="de"]').click();
+
+    // Every visible string follows, and so does the document language.
+    await expect(page.getByRole('button', { name: 'Erwähnungen', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Was ist jetzt zu tun' })).toBeVisible();
+    await expect(page.locator('html')).toHaveAttribute('lang', 'de');
+
+    // The choice outlives a reload.
+    await page.reload();
+    await waitForDashboard(page, 'Aktualisieren');
+    await expect(page.getByRole('button', { name: 'Sprache' })).toHaveAttribute('data-locale', 'de');
+
+    // And English is one click away.
+    await page.getByRole('button', { name: 'Sprache' }).click();
+    await page.locator('[data-locale-option="en"]').click();
+    await expect(page.getByRole('button', { name: 'Mentions', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: /Refresh/ })).toBeVisible();
+
+    // Put it back, so the other tests find the language they expect.
+    await page.getByRole('button', { name: 'Language' }).click();
+    await page.locator('[data-locale-option="it"]').click();
+    await expect(page.getByRole('button', { name: /Aggiorna/ })).toBeVisible();
   });
 });
 

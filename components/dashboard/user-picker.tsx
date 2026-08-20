@@ -15,10 +15,12 @@ import {
 } from '@/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import type { SelectableUser } from '@/lib/dashboard-types';
+import type { Messages } from '@/lib/i18n';
 import { initials } from '@/lib/format';
 import { cn } from '@/lib/utils';
 
 type UserPickerProps = {
+  t: Messages;
   users: SelectableUser[];
   selected: SelectableUser | null;
   defaultAccountId: string | null;
@@ -27,6 +29,7 @@ type UserPickerProps = {
 };
 
 export function UserPicker({
+  t,
   users,
   selected,
   defaultAccountId,
@@ -59,7 +62,7 @@ export function UserPicker({
             ) : (
               <>
                 <UserRound className="size-4 opacity-60" />
-                <span className="text-muted-foreground">Scegli un utente</span>
+                <span className="text-muted-foreground">{t.picker.placeholder}</span>
               </>
             )}
           </span>
@@ -69,9 +72,9 @@ export function UserPicker({
 
       <PopoverContent className="w-[17rem] p-0" align="start">
         <Command>
-          <CommandInput placeholder="Cerca una persona…" />
+          <CommandInput placeholder={t.picker.search} />
           <CommandList>
-            <CommandEmpty>Nessun utente trovato.</CommandEmpty>
+            <CommandEmpty>{t.picker.empty}</CommandEmpty>
             <CommandGroup>
               {users.map((user) => (
                 <CommandItem
@@ -92,7 +95,7 @@ export function UserPicker({
                   <span className="truncate">{user.displayName}</span>
                   {user.accountId === defaultAccountId ? (
                     <span className="ml-1 text-[10px] uppercase tracking-wide text-muted-foreground">
-                      io
+                      {t.picker.me}
                     </span>
                   ) : null}
                   <Check
