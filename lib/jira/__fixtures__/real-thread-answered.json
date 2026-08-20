@@ -1,0 +1,1337 @@
+[
+  {
+    "id": "79432",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79432",
+    "author": {
+      "accountId": "712020:11111111-1111-1111-1111-111111111111",
+      "accountType": "atlassian",
+      "displayName": "Target User",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "01dc3237014e"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "cb55c9731ea1"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-21T14:56:59.176+0200",
+    "updated": "2026-07-21T14:56:59.176+0200"
+  },
+  {
+    "id": "79424",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79424",
+    "author": {
+      "accountId": "712020:11111111-1111-1111-1111-111111111111",
+      "accountType": "atlassian",
+      "displayName": "Target User",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "43afb16d5caa"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "250c645efaea"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-21T14:22:33.160+0200",
+    "updated": "2026-07-21T14:22:33.160+0200"
+  },
+  {
+    "id": "79401",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79401",
+    "author": {
+      "accountId": "712020:22222223-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 4",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "627b6bc5c86e"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:11111111-1111-1111-1111-111111111111",
+                "text": "@Target User",
+                "accessLevel": "",
+                "localId": "e3660724be5c"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "mediaSingle",
+          "attrs": {
+            "width": 891,
+            "widthType": "pixel",
+            "localId": "e23b9a355eb6",
+            "layout": "align-start"
+          },
+          "content": [
+            {
+              "type": "media",
+              "attrs": {
+                "type": "file",
+                "id": "2e0f83b3-95e4-4769-8682-828623850043",
+                "alt": "image-20260721-101311.png",
+                "collection": "",
+                "localId": "67a381235abf",
+                "height": 605,
+                "width": 1589
+              }
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "13aa9b2b4380"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            },
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "388ce44297d3"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "9d9a7929aa16"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lore"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:11111111-1111-1111-1111-111111111111",
+                "text": "@Target User",
+                "accessLevel": "",
+                "localId": "b51b5324-90e3-43d2-93ee-6632c326d7c7"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lore"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-21T12:15:22.227+0200",
+    "updated": "2026-07-21T12:15:22.227+0200"
+  },
+  {
+    "id": "79382",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79382",
+    "author": {
+      "accountId": "712020:11111111-1111-1111-1111-111111111111",
+      "accountType": "atlassian",
+      "displayName": "Target User",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "cb1cd793be05"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "db62756ec070"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-21T10:58:56.533+0200",
+    "updated": "2026-07-21T10:58:56.533+0200"
+  },
+  {
+    "id": "79380",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79380",
+    "author": {
+      "accountId": "712020:11111111-1111-1111-1111-111111111111",
+      "accountType": "atlassian",
+      "displayName": "Target User",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "342c3128c17f"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "9f6763a022cd"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "b12e8df89529"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "da1367f38f7c"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ip"
+            },
+            {
+              "type": "text",
+              "text": "lore",
+              "marks": [
+                {
+                  "type": "strong"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum",
+              "marks": [
+                {
+                  "type": "em"
+                }
+              ]
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "89255d7459d3"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "6e875be57404"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-21T10:56:36.554+0200",
+    "updated": "2026-07-21T10:56:36.554+0200"
+  },
+  {
+    "id": "79370",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79370",
+    "author": {
+      "accountId": "712020:11111111-1111-1111-1111-111111111111",
+      "accountType": "atlassian",
+      "displayName": "Target User",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "518d4850476f"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "f6168135f1fb"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "31ec54909d6b"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-21T10:41:55.746+0200",
+    "updated": "2026-07-21T10:42:05.288+0200"
+  },
+  {
+    "id": "79358",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79358",
+    "author": {
+      "accountId": "712020:22222223-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 4",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "24a5b2e3eb57"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:11111111-1111-1111-1111-111111111111",
+                "text": "@Target User",
+                "accessLevel": "",
+                "localId": "4fb7573b6c7c"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "025e91def3f1"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            },
+            {
+              "type": "emoji",
+              "attrs": {
+                "shortName": ":sweat_smile:",
+                "id": "1f605",
+                "text": "😅",
+                "localId": "8a4cef0755f8"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lore"
+            }
+          ]
+        },
+        {
+          "type": "bulletList",
+          "attrs": {
+            "localId": "d2ee967e477c"
+          },
+          "content": [
+            {
+              "type": "listItem",
+              "attrs": {
+                "localId": "5aa7c19e5c4f"
+              },
+              "content": [
+                {
+                  "type": "paragraph",
+                  "attrs": {
+                    "localId": "6c76c6efaaa8"
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "lorem ipsum dolor"
+                    },
+                    {
+                      "type": "hardBreak"
+                    }
+                  ]
+                },
+                {
+                  "type": "mediaSingle",
+                  "attrs": {
+                    "width": 867,
+                    "widthType": "pixel",
+                    "localId": "ff43b6a4de85",
+                    "layout": "align-start"
+                  },
+                  "content": [
+                    {
+                      "type": "media",
+                      "attrs": {
+                        "type": "file",
+                        "id": "1861e700-b493-4f99-822b-c0c03c7169be",
+                        "alt": "image-20260721-073620.png",
+                        "collection": "",
+                        "localId": "ecf91f44c643",
+                        "height": 962,
+                        "width": 1610
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "paragraph",
+                  "attrs": {
+                    "localId": "00bf2577c646"
+                  }
+                }
+              ]
+            },
+            {
+              "type": "listItem",
+              "attrs": {
+                "localId": "309c29ffdfae"
+              },
+              "content": [
+                {
+                  "type": "paragraph",
+                  "attrs": {
+                    "localId": "4c98426435e2"
+                  },
+                  "content": [
+                    {
+                      "type": "text",
+                      "text": "lorem ipsum dolor"
+                    },
+                    {
+                      "type": "hardBreak"
+                    }
+                  ]
+                },
+                {
+                  "type": "mediaSingle",
+                  "attrs": {
+                    "width": 867,
+                    "widthType": "pixel",
+                    "localId": "492238cf7982",
+                    "layout": "align-start"
+                  },
+                  "content": [
+                    {
+                      "type": "media",
+                      "attrs": {
+                        "type": "file",
+                        "id": "f78280b3-75bd-4554-86e8-6fba39334ba8",
+                        "alt": "image-20260721-073941.png",
+                        "collection": "",
+                        "localId": "b3d9cb0573dd",
+                        "height": 971,
+                        "width": 1527
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "310a4f97e427"
+          }
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "50921f599691"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-21T09:42:06.657+0200",
+    "updated": "2026-07-21T09:42:06.657+0200"
+  },
+  {
+    "id": "79357",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79357",
+    "author": {
+      "accountId": "712020:11111111-1111-1111-1111-111111111111",
+      "accountType": "atlassian",
+      "displayName": "Target User",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "3a6e31c52173"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "b07ef8d2-5161-424f-b356-9b15447b26e4"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-21T09:27:36.074+0200",
+    "updated": "2026-07-21T09:27:36.074+0200"
+  },
+  {
+    "id": "79347",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79347",
+    "author": {
+      "accountId": "712020:11111111-1111-1111-1111-111111111111",
+      "accountType": "atlassian",
+      "displayName": "Target User",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "6844a26f8d93"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "670784721f87"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lore"
+            },
+            {
+              "type": "hardBreak"
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "39148627e0e6"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            },
+            {
+              "type": "inlineCard",
+              "attrs": {
+                "url": "https://example.invalid/link",
+                "localId": "a134244b73a0"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lore"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "77781ba60714"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-21T09:02:03.893+0200",
+    "updated": "2026-07-21T09:02:03.893+0200"
+  },
+  {
+    "id": "79305",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79305",
+    "author": {
+      "accountId": "712020:22222223-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 4",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "519ce987d717"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem i"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:11111111-1111-1111-1111-111111111111",
+                "text": "@Target User",
+                "accessLevel": "",
+                "localId": "f204ddcda0cb"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "mediaSingle",
+          "attrs": {
+            "width": 891,
+            "widthType": "pixel",
+            "localId": "43c35e99d860",
+            "layout": "align-start"
+          },
+          "content": [
+            {
+              "type": "media",
+              "attrs": {
+                "type": "file",
+                "id": "bc2e2d3b-65ae-44f8-af2f-2682de7d6094",
+                "alt": "image-20260720-194138.png",
+                "collection": "",
+                "localId": "5081f5634ce4",
+                "height": 615,
+                "width": 1712
+              }
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "9ad62c08a725"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "2455aff94408"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lore"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222221-2222-2222-2222-222222222222",
+                "text": "@Colleague 1",
+                "accessLevel": "",
+                "localId": "a5e936ba-97b6-4c28-926c-779a1530acc7"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lore"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-20T21:42:30.315+0200",
+    "updated": "2026-07-20T21:42:30.315+0200"
+  },
+  {
+    "id": "79297",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79297",
+    "author": {
+      "accountId": "712020:22222221-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 1",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "26cb9130adca"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:11111111-1111-1111-1111-111111111111",
+                "text": "@Target User",
+                "accessLevel": "",
+                "localId": "b15ce96c3d2a"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "d44c68e1-3ffd-4d6e-adc4-77779bbfbeca"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-20T17:09:44.267+0200",
+    "updated": "2026-07-20T17:09:44.267+0200"
+  },
+  {
+    "id": "79295",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79295",
+    "author": {
+      "accountId": "712020:11111111-1111-1111-1111-111111111111",
+      "accountType": "atlassian",
+      "displayName": "Target User",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "f848c3360b61"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222221-2222-2222-2222-222222222222",
+                "text": "@Colleague 1",
+                "accessLevel": "",
+                "localId": "00d8fa1f98fe"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-20T17:01:17.596+0200",
+    "updated": "2026-07-20T17:01:17.596+0200"
+  },
+  {
+    "id": "79255",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/79255",
+    "author": {
+      "accountId": "712020:22222221-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 1",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "49f459ebf7f3"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lore"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:11111111-1111-1111-1111-111111111111",
+                "text": "@Target User",
+                "accessLevel": "",
+                "localId": "5e9ee1d1-7c33-4e25-a7da-a31f2c402529"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "49f459ebf7f3"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lore"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "12c3fbf2-ba83-4a7c-8189-a1d48893d121"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lore"
+            }
+          ]
+        },
+        {
+          "type": "mediaSingle",
+          "attrs": {
+            "width": 656,
+            "widthType": "pixel",
+            "localId": "933e5335c13d",
+            "layout": "align-start"
+          },
+          "content": [
+            {
+              "type": "media",
+              "attrs": {
+                "type": "file",
+                "id": "b1db95ac-318a-4318-b90e-c9f6f4cf908a",
+                "alt": "image-20260720-120349.png",
+                "collection": "",
+                "localId": "a64364857426",
+                "height": 539,
+                "width": 1209
+              }
+            }
+          ]
+        },
+        {
+          "type": "mediaSingle",
+          "attrs": {
+            "width": 644,
+            "widthType": "pixel",
+            "localId": "40e4c431a8c9",
+            "layout": "align-start"
+          },
+          "content": [
+            {
+              "type": "media",
+              "attrs": {
+                "type": "file",
+                "id": "5d5de215-4a07-4e67-88fc-d424eaf710d0",
+                "alt": "image-20260720-120534.png",
+                "collection": "",
+                "localId": "1023df1afbad",
+                "height": 221,
+                "width": 1233
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-20T14:05:50.362+0200",
+    "updated": "2026-07-20T14:05:50.362+0200"
+  },
+  {
+    "id": "78992",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/78992",
+    "author": {
+      "accountId": "712020:22222221-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 1",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "730b6558bd7e"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "fd6929e79b24"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lore"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:11111111-1111-1111-1111-111111111111",
+                "text": "@Target User",
+                "accessLevel": "",
+                "localId": "3aff2268-2534-4cc9-ae70-370791853aff"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-16T14:06:06.903+0200",
+    "updated": "2026-07-16T14:06:06.903+0200"
+  },
+  {
+    "id": "78979",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/78979",
+    "author": {
+      "accountId": "712020:22222223-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 4",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "c05377805357"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:11111111-1111-1111-1111-111111111111",
+                "text": "@Target User",
+                "accessLevel": "",
+                "localId": "ca1cc7935125"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222221-2222-2222-2222-222222222222",
+                "text": "@Colleague 1",
+                "accessLevel": "",
+                "localId": "7d8ddea0-db72-48f5-8770-30b0b36797f6"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-16T11:51:02.987+0200",
+    "updated": "2026-07-16T11:51:02.987+0200"
+  },
+  {
+    "id": "78977",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/78977",
+    "author": {
+      "accountId": "712020:11111111-1111-1111-1111-111111111111",
+      "accountType": "atlassian",
+      "displayName": "Target User",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "3a15f38db36c"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "26ad06d49e0e"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lore"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222221-2222-2222-2222-222222222222",
+                "text": "@Colleague 1",
+                "accessLevel": "",
+                "localId": "800c692a-c06b-4b8b-bb3a-3489d938144d"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-16T11:47:56.733+0200",
+    "updated": "2026-07-16T11:47:56.733+0200"
+  },
+  {
+    "id": "78956",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/78956",
+    "author": {
+      "accountId": "712020:22222223-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 4",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "229ae8b467a8"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:11111111-1111-1111-1111-111111111111",
+                "text": "@Target User",
+                "accessLevel": "",
+                "localId": "d8e34f20-77f0-4cff-93ca-f64e2598466a"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "e5a078a67fe5"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "0fc7829516dd"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "b54f0fb5ad78"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lore"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222221-2222-2222-2222-222222222222",
+                "text": "@Colleague 1",
+                "accessLevel": "",
+                "localId": "786f5468-68bc-4061-ba15-0a570aa1ac61"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lore"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-16T10:32:44.471+0200",
+    "updated": "2026-07-16T10:32:44.471+0200"
+  },
+  {
+    "id": "78806",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/78806",
+    "author": {
+      "accountId": "712020:22222223-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 4",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "ae7b4149e5da"
+          },
+          "content": [
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222221-2222-2222-2222-222222222222",
+                "text": "@Colleague 1",
+                "accessLevel": "",
+                "localId": "e8844f349cb2"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:11111111-1111-1111-1111-111111111111",
+                "text": "@Target User",
+                "accessLevel": "",
+                "localId": "24470c27-6535-47d1-86a5-9b766a682dba"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsu"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-15T10:49:38.958+0200",
+    "updated": "2026-07-15T10:49:38.958+0200"
+  },
+  {
+    "id": "78800",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/78800",
+    "author": {
+      "accountId": "712020:22222221-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 1",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "04d900b6c440"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lore"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222223-2222-2222-2222-222222222222",
+                "text": "@Colleague 4",
+                "accessLevel": "",
+                "localId": "7937b8c2-15f6-44a8-9d66-8c59ec168f92"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lore"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-07-15T10:44:10.489+0200",
+    "updated": "2026-07-15T10:44:10.489+0200"
+  }
+]

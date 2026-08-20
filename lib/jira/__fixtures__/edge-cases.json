@@ -1,0 +1,765 @@
+{
+  "targetAccountId": "712020:11111111-1111-1111-1111-111111111111",
+  "threads": {
+    "wikiLegacyMention": [
+      {
+        "id": "1",
+        "self": "https://example.invalid/comment/1",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": "Hey [~accountid:712020:11111111-1111-1111-1111-111111111111] can you look at this?",
+        "created": "2026-08-01T09:00:00.000+0200",
+        "updated": "2026-08-01T09:00:00.000+0200"
+      }
+    ],
+    "mentionNestedDeep": [
+      {
+        "id": "2",
+        "self": "https://example.invalid/comment/2",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "panel",
+              "attrs": {
+                "panelType": "info"
+              },
+              "content": [
+                {
+                  "type": "bulletList",
+                  "content": [
+                    {
+                      "type": "listItem",
+                      "content": [
+                        {
+                          "type": "paragraph",
+                          "content": [
+                            {
+                              "type": "text",
+                              "text": "please review "
+                            },
+                            {
+                              "type": "mention",
+                              "attrs": {
+                                "id": "712020:11111111-1111-1111-1111-111111111111",
+                                "text": "@Target User"
+                              }
+                            },
+                            {
+                              "type": "text",
+                              "text": " thanks"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-08-02T09:00:00.000+0200",
+        "updated": "2026-08-02T09:00:00.000+0200"
+      }
+    ],
+    "selfMentionOnly": [
+      {
+        "id": "3",
+        "self": "https://example.invalid/comment/3",
+        "author": {
+          "accountId": "712020:11111111-1111-1111-1111-111111111111",
+          "accountType": "atlassian",
+          "displayName": "Target User",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "note to self "
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-08-03T09:00:00.000+0200",
+        "updated": "2026-08-03T09:00:00.000+0200"
+      }
+    ],
+    "accountIdAsPlainText": [
+      {
+        "id": "4",
+        "self": "https://example.invalid/comment/4",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "see audit log for 712020:11111111-1111-1111-1111-111111111111 please"
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-08-04T09:00:00.000+0200",
+        "updated": "2026-08-04T09:00:00.000+0200"
+      }
+    ],
+    "mentionThenReply": [
+      {
+        "id": "5",
+        "self": "https://example.invalid/comment/5",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " any update?"
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-08-05T09:00:00.000+0200",
+        "updated": "2026-08-05T09:00:00.000+0200"
+      },
+      {
+        "id": "6",
+        "self": "https://example.invalid/comment/6",
+        "author": {
+          "accountId": "712020:11111111-1111-1111-1111-111111111111",
+          "accountType": "atlassian",
+          "displayName": "Target User",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "done, deployed yesterday"
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-08-05T11:00:00.000+0200",
+        "updated": "2026-08-05T11:00:00.000+0200"
+      }
+    ],
+    "replyThenMentionedAgain": [
+      {
+        "id": "7",
+        "self": "https://example.invalid/comment/7",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " first ping"
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-08-06T09:00:00.000+0200",
+        "updated": "2026-08-06T09:00:00.000+0200"
+      },
+      {
+        "id": "8",
+        "self": "https://example.invalid/comment/8",
+        "author": {
+          "accountId": "712020:11111111-1111-1111-1111-111111111111",
+          "accountType": "atlassian",
+          "displayName": "Target User",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "answered the first"
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-08-06T10:00:00.000+0200",
+        "updated": "2026-08-06T10:00:00.000+0200"
+      },
+      {
+        "id": "9",
+        "self": "https://example.invalid/comment/9",
+        "author": {
+          "accountId": "712020:22222223-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 3",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " second ping, still open"
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-08-06T18:00:00.000+0200",
+        "updated": "2026-08-06T18:00:00.000+0200"
+      }
+    ],
+    "sameTimestampReply": [
+      {
+        "id": "10",
+        "self": "https://example.invalid/comment/10",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-08-07T09:00:00.000+0200",
+        "updated": "2026-08-07T09:00:00.000+0200"
+      },
+      {
+        "id": "11",
+        "self": "https://example.invalid/comment/11",
+        "author": {
+          "accountId": "712020:11111111-1111-1111-1111-111111111111",
+          "accountType": "atlassian",
+          "displayName": "Target User",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "on it"
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-08-07T09:00:00.000+0200",
+        "updated": "2026-08-07T09:00:00.000+0200"
+      }
+    ],
+    "otherUserMentioned": [
+      {
+        "id": "12",
+        "self": "https://example.invalid/comment/12",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:22222223-2222-2222-2222-222222222222",
+                    "text": "@Colleague 3"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " your turn"
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-08-08T09:00:00.000+0200",
+        "updated": "2026-08-08T09:00:00.000+0200"
+      }
+    ],
+    "fyiLineAfterRequest": [
+      {
+        "id": "20",
+        "self": "https://example.invalid/comment/20",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:22222223-2222-2222-2222-222222222222",
+                    "text": "@Colleague 3"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " can you please update this ticket so that we know the timings?"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "fyi "
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:22222223-2222-2222-2222-222222222222",
+                    "text": "@Colleague 3"
+                  }
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:22222221-2222-2222-2222-222222222222",
+                    "text": "@Colleague 1"
+                  }
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-07-21T14:48:00.000+0200",
+        "updated": "2026-07-21T14:48:00.000+0200"
+      }
+    ],
+    "fyiAfterHardBreak": [
+      {
+        "id": "21",
+        "self": "https://example.invalid/comment/21",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:22222223-2222-2222-2222-222222222222",
+                    "text": "@Someone Else"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " please have a look"
+                },
+                {
+                  "type": "hardBreak"
+                },
+                {
+                  "type": "text",
+                  "text": "fyi "
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-07-22T09:00:00.000+0200",
+        "updated": "2026-07-22T09:00:00.000+0200"
+      }
+    ],
+    "fyiWithColon": [
+      {
+        "id": "22",
+        "self": "https://example.invalid/comment/22",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "FYI: "
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-07-23T09:00:00.000+0200",
+        "updated": "2026-07-23T09:00:00.000+0200"
+      }
+    ],
+    "ccLine": [
+      {
+        "id": "23",
+        "self": "https://example.invalid/comment/23",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "deployed to prod"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "cc "
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-07-24T09:00:00.000+0200",
+        "updated": "2026-07-24T09:00:00.000+0200"
+      }
+    ],
+    "perConoscenza": [
+      {
+        "id": "24",
+        "self": "https://example.invalid/comment/24",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "per conoscenza "
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-07-25T09:00:00.000+0200",
+        "updated": "2026-07-25T09:00:00.000+0200"
+      }
+    ],
+    "fyiThatStillAsks": [
+      {
+        "id": "25",
+        "self": "https://example.invalid/comment/25",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "fyi "
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " can you confirm the date?"
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-07-26T09:00:00.000+0200",
+        "updated": "2026-07-26T09:00:00.000+0200"
+      }
+    ],
+    "askedThenFyi": [
+      {
+        "id": "26",
+        "self": "https://example.invalid/comment/26",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                },
+                {
+                  "type": "text",
+                  "text": " can you review this?"
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-07-27T09:00:00.000+0200",
+        "updated": "2026-07-27T09:00:00.000+0200"
+      },
+      {
+        "id": "27",
+        "self": "https://example.invalid/comment/27",
+        "author": {
+          "accountId": "712020:22222223-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 3",
+          "active": true
+        },
+        "body": {
+          "type": "doc",
+          "version": 1,
+          "content": [
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "merged"
+                }
+              ]
+            },
+            {
+              "type": "paragraph",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "fyi "
+                },
+                {
+                  "type": "mention",
+                  "attrs": {
+                    "id": "712020:11111111-1111-1111-1111-111111111111",
+                    "text": "@Target User"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "created": "2026-07-28T09:00:00.000+0200",
+        "updated": "2026-07-28T09:00:00.000+0200"
+      }
+    ],
+    "wikiFyiLine": [
+      {
+        "id": "28",
+        "self": "https://example.invalid/comment/28",
+        "author": {
+          "accountId": "712020:22222221-2222-2222-2222-222222222222",
+          "accountType": "atlassian",
+          "displayName": "Colleague 1",
+          "active": true
+        },
+        "body": "updated the ticket\nfyi [~accountid:712020:11111111-1111-1111-1111-111111111111]",
+        "created": "2026-07-29T09:00:00.000+0200",
+        "updated": "2026-07-29T09:00:00.000+0200"
+      }
+    ]
+  }
+}

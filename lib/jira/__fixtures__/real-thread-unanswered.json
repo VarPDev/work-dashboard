@@ -1,0 +1,86 @@
+[
+  {
+    "id": "82562",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/82562",
+    "author": {
+      "accountId": "712020:22222221-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 1",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "e08899219251"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lorem"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:22222222-2222-2222-2222-222222222222",
+                "text": "@Colleague 2",
+                "accessLevel": "",
+                "localId": "b4b5abbb-48c4-4bc8-b625-449edbaf9757"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lorem ipsum dolor"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-08-20T10:26:03.325+0200",
+    "updated": "2026-08-20T10:26:03.325+0200"
+  },
+  {
+    "id": "81975",
+    "self": "https://example.invalid/rest/api/3/issue/X-1/comment/81975",
+    "author": {
+      "accountId": "712020:22222222-2222-2222-2222-222222222222",
+      "accountType": "atlassian",
+      "displayName": "Colleague 2",
+      "active": true
+    },
+    "body": {
+      "type": "doc",
+      "content": [
+        {
+          "type": "paragraph",
+          "attrs": {
+            "localId": "6059d6532312"
+          },
+          "content": [
+            {
+              "type": "text",
+              "text": "lore"
+            },
+            {
+              "type": "mention",
+              "attrs": {
+                "id": "712020:11111111-1111-1111-1111-111111111111",
+                "text": "@Target User",
+                "accessLevel": "",
+                "localId": "ed6114d6-ff34-490a-9be6-fb41d95bcd86"
+              }
+            },
+            {
+              "type": "text",
+              "text": "lore"
+            }
+          ]
+        }
+      ]
+    },
+    "created": "2026-08-14T10:53:42.212+0200",
+    "updated": "2026-08-14T10:53:42.212+0200"
+  }
+]
