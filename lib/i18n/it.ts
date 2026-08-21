@@ -83,6 +83,15 @@ export const it: Messages = {
     clear: 'Tutte le board',
   },
 
+  search: {
+    placeholder: 'Cerca…',
+    label: 'Cerca tra le attività',
+    clear: 'Cancella la ricerca',
+    shortcutHint: 'premi / per cercare',
+    noResults: (query) => `Nessun risultato per “${query}”.`,
+    tryAnother: 'La ricerca tollera gli errori di battitura, ma non trova nulla con questo testo.',
+  },
+
   hidden: {
     count: (count) =>
       `${count} ${count === 1 ? 'menzione nascosta' : 'menzioni nascoste'} fino al prossimo commento`,

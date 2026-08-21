@@ -22,7 +22,9 @@ Two sources, both computed against the selected user's `accountId`:
 
 Everything lands in **one flat list**, sorted by priority, then due date (missing
 dates last), then last update. The board an issue belongs to is a column on the
-row and a filter above the list, not a section heading.
+row and a filter above the list, not a section heading. A fuzzy full-text search
+(press `/`) finds a ticket by anything on the row — key, summary, labels, board,
+assignee, the comment that mentioned you — and survives a typo.
 
 Runs on `localhost` only, for one person, with one API token. There is no login
 and no multi-user support, by design — see
@@ -84,7 +86,7 @@ selected.
 | --- | --- |
 | `pnpm dev` | Dev server (port 3000, or the next free one). |
 | `pnpm probe [query] [accountId]` | Standalone Jira diagnostic: identity, which search endpoint is live, which JQL clauses work, priorities, boards, user-directory permission. `query` looks a user up; `accountId` runs the JQL matrix as that person. |
-| `pnpm test` | Unit tests (mention rule, board resolution, ordering, cache isolation). |
+| `pnpm test` | Unit tests (mention rule, board resolution, ordering, search, cache isolation). |
 | `pnpm test:e2e` | Browser tests against a built app. |
 | `pnpm typecheck` / `pnpm lint` | Types and lint. |
 | `pnpm build` | Production build. |
@@ -104,6 +106,7 @@ lib/dismissals      -> the hide-until-next-comment rule
 lib/dismissals-store -> where hidden rows are written (data/dismissals.json)
 lib/theme*          -> the light/dark choice, and the script that applies it
 lib/i18n/*          -> the message dictionaries, and how a locale is chosen
+lib/search.ts       -> the fuzzy index and how a query is answered
 config/*            -> the knobs: window, caps, board priority, priority order
 ```
 

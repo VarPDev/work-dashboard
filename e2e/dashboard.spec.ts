@@ -285,6 +285,71 @@ test.describe('theme on a light system', () => {
   });
 });
 
+test.describe('search', () => {
+  test('narrows the list, tolerates a typo, and clears', async ({ page }) => {
+    await page.goto('/');
+    await waitForDashboard(page);
+
+    const total = await rows(page).count();
+    const box = page.getByTestId('search-box');
+
+    // Take a word from the first row's summary and look for it.
+    const firstSummary = ((await rows(page).first().locator('..').textContent()) ?? '').trim();
+    const word = (firstSummary.match(/[A-Za-z]{6,}/) ?? ['the'])[0];
+
+    await box.fill(word);
+    const found = await rows(page).count();
+    expect(found).toBeGreaterThan(0);
+    expect(found).toBeLessThan(total);
+
+    // The same word with a letter dropped must still find something: this is the
+    // whole point of a fuzzy index rather than a substring filter.
+    await box.fill(word.slice(0, 3) + word.slice(4));
+    expect(await rows(page).count()).toBeGreaterThan(0);
+
+    // Nonsense finds nothing, and says so instead of showing everything.
+    await box.fill('zzzzqqqqwwww');
+    await expect(rows(page)).toHaveCount(0);
+    await expect(page.getByText(/Nessun risultato per/)).toBeVisible();
+
+    await page.getByRole('button', { name: /Cancella la ricerca/ }).click();
+    await expect(rows(page)).toHaveCount(total);
+  });
+
+  test('finds a row by its issue key, and combines with the filters', async ({ page }) => {
+    await page.goto('/');
+    await waitForDashboard(page);
+
+    const key = ((await rows(page).first().textContent()) ?? '').trim();
+    await page.getByTestId('search-box').fill(key);
+
+    await expect(rows(page).first()).toHaveText(key);
+
+    // A filter that excludes the match leaves nothing, rather than ignoring one
+    // of the two conditions.
+    const kinds = ['Assegnate', 'Menzioni'];
+    const counts: number[] = [];
+    for (const kind of kinds) {
+      await page.getByRole('button', { name: kind, exact: true }).click();
+      counts.push(await rows(page).count());
+    }
+    expect(counts.filter((count) => count > 0)).toHaveLength(1);
+  });
+
+  test('the slash key focuses the search box', async ({ page }) => {
+    await page.goto('/');
+    await waitForDashboard(page);
+
+    await page.keyboard.press('/');
+    await expect(page.getByTestId('search-box')).toBeFocused();
+
+    // And Escape empties it.
+    await page.keyboard.type('hotspot');
+    await page.keyboard.press('Escape');
+    await expect(page.getByTestId('search-box')).toHaveValue('');
+  });
+});
+
 test.describe('language', () => {
   test('follows the browser language, and lets you change it', async ({ page }) => {
     await page.goto('/');

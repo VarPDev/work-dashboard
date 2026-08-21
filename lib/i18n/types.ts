@@ -92,6 +92,15 @@ export type Messages = {
     clear: string;
   };
 
+  search: {
+    placeholder: string;
+    label: string;
+    clear: string;
+    shortcutHint: string;
+    noResults: (query: string) => string;
+    tryAnother: string;
+  };
+
   hidden: {
     count: (count: number) => string;
     show: string;

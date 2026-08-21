@@ -97,6 +97,22 @@ integration account, not to a person. Consequences:
 - **Nothing is written back to Jira.** Hiding a row is invisible to your
   colleagues; nobody learns that you decided not to answer.
 
+## Search
+
+- **Fuzzy, client-side, over the items already loaded** (Fuse.js). No Jira call,
+  nothing to index server-side, and it searches what you can see — including the
+  text of the comment that mentioned you.
+- **The threshold is 0.38.** Low enough that a query is not a list of everything,
+  high enough to absorb a dropped or swapped letter. Expect the occasional loose
+  match at the bottom of the results: that is the cost of tolerating typos.
+- **A full issue key is answered exactly**, not fuzzily. Pasting `ABC-1234` would
+  otherwise also return the dozen keys of the same project that are one edit
+  away. A key that is not on screen falls back to a fuzzy match, so a typo in a
+  key still finds something.
+- **Search reorders by relevance**, so while a query is active the priority order
+  is not what you see. The totals in the header stay global on purpose: they
+  describe the workload, not the current view.
+
 ## Sorting
 
 - `Not Clear` is ranked above `Low` by a manual override in

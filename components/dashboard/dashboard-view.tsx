@@ -17,6 +17,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { BoardFilter } from '@/components/dashboard/board-filter';
 import { DashboardSkeleton } from '@/components/dashboard/dashboard-skeleton';
 import { LocalePicker } from '@/components/dashboard/locale-picker';
+import { SearchBox } from '@/components/dashboard/search-box';
 import { TaskRow } from '@/components/dashboard/task-row';
 import { useDismissals } from '@/components/dashboard/use-dismissals';
 import { useI18n } from '@/components/dashboard/use-i18n';
@@ -37,6 +38,7 @@ import type {
 import { isDismissed } from '@/lib/dismissals';
 import { formatAge, formatClockTime } from '@/lib/format';
 import { boardFacets } from '@/lib/grouping';
+import { buildSearchIndex, searchItems } from '@/lib/search';
 import type { Messages } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
@@ -104,6 +106,7 @@ export function DashboardView() {
   const [filter, setFilter] = useState<Filter>('all');
   const [boardFilter, setBoardFilter] = useState<Set<string>>(new Set());
   const [showHidden, setShowHidden] = useState(false);
+  const [query, setQuery] = useState('');
 
   // Ticks so the "how old is this" label keeps telling the truth on a tab left
   // open. Nothing is fetched here.
@@ -233,21 +236,35 @@ export function DashboardView() {
 
   const boards = useMemo(() => boardFacets(kept), [kept]);
 
+  /**
+   * The index covers every item, hidden ones included, so a query narrows the
+   * list and the hidden bar the same way. With no query the original order — by
+   * priority — is preserved; with one, the order is by relevance.
+   */
+  const index = useMemo(
+    () => buildSearchIndex(payload?.items ?? []),
+    [payload],
+  );
+  const matched = useMemo(
+    () => searchItems(index, payload?.items ?? [], query),
+    [index, payload, query],
+  );
+
   const passesFilters = useCallback(
     (item: DashboardItem) =>
       matchesFilter(item, filter) && (boardFilter.size === 0 || boardFilter.has(item.board.id)),
     [filter, boardFilter],
   );
 
-  const visibleItems = useMemo(() => kept.filter(passesFilters), [kept, passesFilters]);
+  const visibleItems = useMemo(
+    () => matched.filter((item) => !isDismissed(item, dismissals) && passesFilters(item)),
+    [matched, dismissals, passesFilters],
+  );
 
-  /** Hidden rows that would otherwise be on screen, for the "mostra" toggle. */
+  /** Hidden rows that would otherwise be on screen, for the "show" toggle. */
   const hiddenItems = useMemo(
-    () =>
-      payload
-        ? payload.items.filter((item) => isDismissed(item, dismissals) && passesFilters(item))
-        : [],
-    [payload, dismissals, passesFilters],
+    () => matched.filter((item) => isDismissed(item, dismissals) && passesFilters(item)),
+    [matched, dismissals, passesFilters],
   );
 
   const selectedUser: SelectableUser | null =
@@ -359,6 +376,8 @@ export function DashboardView() {
 
         <div className="flex flex-col gap-2">
           <div className="flex flex-wrap items-center gap-2">
+            <SearchBox value={query} t={t} onChange={setQuery} />
+
             {FILTER_IDS.map((id) => (
               <Button
                 key={id}
@@ -417,12 +436,18 @@ export function DashboardView() {
         {!loading && !taskError && payload && visibleItems.length === 0 ? (
           <div className="rounded-md border border-dashed border-border px-6 py-16 text-center">
             <p className="font-medium">
-              {payload.items.length === 0 ? t.list.nothingAtAll : t.list.noneWithFilters}
+              {payload.items.length === 0
+                ? t.list.nothingAtAll
+                : query.trim()
+                  ? t.search.noResults(query.trim())
+                  : t.list.noneWithFilters}
             </p>
             <p className="mt-1 text-sm text-muted-foreground">
               {payload.items.length === 0
                 ? t.list.nothingAtAllFor(payload.user.displayName)
-                : t.list.widenFilters}
+                : query.trim()
+                  ? t.search.tryAnother
+                  : t.list.widenFilters}
             </p>
           </div>
         ) : null}

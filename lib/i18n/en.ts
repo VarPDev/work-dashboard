@@ -81,6 +81,15 @@ export const en: Messages = {
     clear: 'All boards',
   },
 
+  search: {
+    placeholder: 'Search…',
+    label: 'Search the tasks',
+    clear: 'Clear the search',
+    shortcutHint: 'press / to search',
+    noResults: (query) => `Nothing matches “${query}”.`,
+    tryAnother: 'The search tolerates typos, but nothing here matches this text.',
+  },
+
   hidden: {
     count: (count) =>
       `${count} hidden ${count === 1 ? 'mention' : 'mentions'} until the next comment`,

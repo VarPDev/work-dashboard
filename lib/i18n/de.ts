@@ -82,6 +82,15 @@ export const de: Messages = {
     clear: 'Alle Boards',
   },
 
+  search: {
+    placeholder: 'Suchen…',
+    label: 'Aufgaben durchsuchen',
+    clear: 'Suche löschen',
+    shortcutHint: '/ drücken, um zu suchen',
+    noResults: (query) => `Keine Treffer für „${query}“.`,
+    tryAnother: 'Die Suche verzeiht Tippfehler, aber dazu passt hier nichts.',
+  },
+
   hidden: {
     count: (count) =>
       `${count} ausgeblendete ${count === 1 ? 'Erwähnung' : 'Erwähnungen'} bis zum nächsten Kommentar`,
