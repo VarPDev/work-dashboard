@@ -10,6 +10,7 @@ export const de: Messages = {
     assigned: 'Zugewiesen',
     mentions: 'Erwähnungen',
     overdue: 'Überfällig',
+    new: 'Neu',
   },
 
   totals: {

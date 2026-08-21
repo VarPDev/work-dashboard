@@ -45,14 +45,14 @@ import { countNew, isNew } from '@/lib/seen';
 import type { Messages } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
-type Filter = 'all' | 'assigned' | 'mentions' | 'overdue';
+type Filter = 'all' | 'assigned' | 'mentions' | 'overdue' | 'new';
 
-const FILTER_IDS: Filter[] = ['all', 'assigned', 'mentions', 'overdue'];
+const FILTER_IDS: Filter[] = ['all', 'assigned', 'mentions', 'overdue', 'new'];
 
 /** Past this age the label turns amber, as a nudge to hit refresh. */
 const STALE_AFTER_MINUTES = 15;
 
-function matchesFilter(item: DashboardItem, filter: Filter): boolean {
+function matchesFilter(item: DashboardItem, filter: Filter, isNewRow: boolean): boolean {
   switch (filter) {
     case 'assigned':
       return item.kind === 'assigned';
@@ -60,6 +60,8 @@ function matchesFilter(item: DashboardItem, filter: Filter): boolean {
       return item.kind === 'mention';
     case 'overdue':
       return item.overdue;
+    case 'new':
+      return isNewRow;
     default:
       return true;
   }
@@ -261,8 +263,9 @@ export function DashboardView() {
 
   const passesFilters = useCallback(
     (item: DashboardItem) =>
-      matchesFilter(item, filter) && (boardFilter.size === 0 || boardFilter.has(item.board.id)),
-    [filter, boardFilter],
+      matchesFilter(item, filter, isNew(item, seen)) &&
+      (boardFilter.size === 0 || boardFilter.has(item.board.id)),
+    [filter, boardFilter, seen],
   );
 
   const visibleItems = useMemo(

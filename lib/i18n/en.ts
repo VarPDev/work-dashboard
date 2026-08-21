@@ -10,6 +10,7 @@ export const en: Messages = {
     assigned: 'Assigned',
     mentions: 'Mentions',
     overdue: 'Overdue',
+    new: 'New',
   },
 
   totals: {

@@ -20,8 +20,9 @@ Two sources, both computed against the selected user's `accountId`:
    you on a "fyi" line do not count, and you can hide any of them until a newer
    comment arrives.
 
-Rows that appeared or changed since your last look carry a **new** badge, so a
-refresh tells you what moved instead of leaving you to compare.
+Rows that appeared or changed since your last look carry a **new** badge, and one
+of the filters keeps only those — so a refresh tells you what moved instead of
+leaving you to compare.
 
 Everything lands in **one flat list**, sorted by priority, then due date (missing
 dates last), then last update. The board an issue belongs to is a column on the

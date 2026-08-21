@@ -22,6 +22,7 @@ export type Messages = {
     assigned: string;
     mentions: string;
     overdue: string;
+    new: string;
   };
 
   totals: {

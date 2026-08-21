@@ -116,6 +116,10 @@ integration account, not to a person. Consequences:
   a month.
 - A hidden row that gets a new comment loses its dismissal *and* is badged: the
   two watermarks are the same comment id, so the chain works out.
+- **"Novità" is one of the filters**, so a long list can be narrowed to just what
+  moved. It combines with the board chips and the search like the others. Marking
+  as seen while that filter is active empties the list, which is correct but
+  reads oddly for a second.
 
 ## Search
 

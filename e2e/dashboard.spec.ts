@@ -384,6 +384,14 @@ test.describe('new since last look', () => {
     await expect(page.locator('[data-new-badge]')).toHaveCount(1);
     await expect(page.getByTestId('new-count')).toContainText('1');
 
+    // The filter keeps only what is new, and combines with the board chips.
+    await page.getByRole('button', { name: 'Novità', exact: true }).click();
+    await expect(rows(page)).toHaveCount(1);
+    await expect(page.locator('[data-new-badge]')).toHaveCount(1);
+
+    await page.getByRole('button', { name: 'Tutte', exact: true }).click();
+    expect(await rows(page).count()).toBeGreaterThan(1);
+
     // Marking as seen clears it, without a refetch.
     await page.getByRole('button', { name: /Segna come viste/ }).click();
     await expect(page.locator('[data-new-badge]')).toHaveCount(0);
