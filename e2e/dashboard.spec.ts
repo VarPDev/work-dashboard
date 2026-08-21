@@ -84,6 +84,36 @@ test('the mentions filter shows only mentions, and assigned only assigned', asyn
   expect(mentionRows + assignedRows).toBe(all);
 });
 
+test('a comment cut off in the row can be read in full in a dialog', async ({ page }) => {
+  await page.goto('/');
+  await waitForDashboard(page);
+  await page.getByRole('button', { name: 'Menzioni', exact: true }).click();
+
+  const expanders = page.getByRole('button', { name: /^Mostra tutto il commento/ });
+  // The button only exists where the preview really is clipped, and how many
+  // comments are that long depends on the day.
+  test.skip((await expanders.count()) === 0, 'no comment on screen is long enough to be cut off');
+
+  await expanders.first().click();
+
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+
+  // The dialog says which issue it belongs to, and that issue is on screen.
+  const title = (await dialog.getByRole('heading').first().textContent()) ?? '';
+  const key = title.match(/[A-Z]+-\d+/)?.[0] ?? '';
+  expect(key).not.toBe('');
+  await expect(rows(page).filter({ hasText: key })).toHaveCount(1);
+
+  // A clipped comment is a long one, and it is all here.
+  const body = (await dialog.locator('[data-comment-body]').innerText()).trim();
+  expect(body.length).toBeGreaterThan(40);
+  await expect(dialog.getByRole('link', { name: /vai al commento/ })).toBeVisible();
+
+  await dialog.getByRole('button', { name: 'Chiudi' }).click();
+  await expect(dialog).toHaveCount(0);
+});
+
 test('the overdue filter only keeps overdue items', async ({ page }) => {
   await page.goto('/');
   await waitForDashboard(page);

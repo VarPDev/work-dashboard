@@ -185,13 +185,27 @@ const BLOCK_TYPES = new Set([
 ]);
 
 /**
- * Flatten a body to plain text for the comment preview in the UI. Not a full
- * ADF renderer — it keeps mentions and emoji readable and drops the rest.
+ * Tidy the whitespace without flattening the comment: runs of spaces collapse,
+ * but a line break stays a line break. The row preview renders it as ordinary
+ * text, where a break reads as a space, while the full-comment dialog keeps the
+ * shape the author gave it.
+ */
+function tidy(text: string): string {
+  return text
+    .replace(/[^\S\n]+/g, ' ')
+    .replace(/ *\n+ */g, '\n')
+    .trim();
+}
+
+/**
+ * Flatten a body to plain text for the comment preview and the full-comment
+ * dialog. Not a full ADF renderer — it keeps mentions and emoji readable and
+ * drops the rest.
  */
 export function bodyToPlainText(body: AdfNode | string | undefined): string {
   if (!body) return '';
   if (typeof body === 'string') {
-    return body.replace(/\[~accountid:[^\]]+\]/g, '@user').replace(/\s+/g, ' ').trim();
+    return tidy(body.replace(/\[~accountid:[^\]]+\]/g, '@user'));
   }
 
   const parts: string[] = [];
@@ -212,7 +226,7 @@ export function bodyToPlainText(body: AdfNode | string | undefined): string {
         return;
       }
       case 'hardBreak':
-        parts.push(' ');
+        parts.push('\n');
         return;
       case 'inlineCard': {
         const url = node.attrs?.url;
@@ -224,9 +238,9 @@ export function bodyToPlainText(body: AdfNode | string | undefined): string {
     }
 
     for (const child of node.content ?? []) walk(child);
-    if (BLOCK_TYPES.has(node.type)) parts.push(' ');
+    if (BLOCK_TYPES.has(node.type)) parts.push('\n');
   };
 
   walk(body);
-  return parts.join('').replace(/\s+/g, ' ').trim();
+  return tidy(parts.join(''));
 }

@@ -8,7 +8,7 @@ import {
   mentionedAccountIds,
 } from './adf';
 import { analyzeMentions, findUnansweredMention, threadMentionsAccount } from './mentions';
-import type { JiraComment } from './types';
+import type { AdfNode, JiraComment } from './types';
 
 import edgeCases from './__fixtures__/edge-cases.json';
 import realAnswered from './__fixtures__/real-thread-answered.json';
@@ -126,6 +126,42 @@ describe('comment preview text', () => {
     const text = bodyToPlainText(threads.wikiLegacyMention[0].body);
     expect(text).toBe('Hey @user can you look at this?');
     expect(text).not.toContain(TARGET);
+  });
+
+  it('collapses spaces but keeps one line break per block', () => {
+    // The row preview shows the breaks as spaces; the full-comment dialog needs
+    // them, or a list of questions arrives as one unreadable blob.
+    const body: AdfNode = {
+      type: 'doc',
+      content: [
+        { type: 'paragraph', content: [{ type: 'text', text: 'can you   check' }] },
+        {
+          type: 'bulletList',
+          content: [
+            {
+              type: 'listItem',
+              content: [{ type: 'paragraph', content: [{ type: 'text', text: 'the first point' }] }],
+            },
+            {
+              type: 'listItem',
+              content: [{ type: 'paragraph', content: [{ type: 'text', text: 'the second one' }] }],
+            },
+          ],
+        },
+        {
+          type: 'paragraph',
+          content: [
+            { type: 'text', text: 'thanks' },
+            { type: 'hardBreak' },
+            { type: 'text', text: 'Marco' },
+          ],
+        },
+      ],
+    };
+
+    expect(bodyToPlainText(body)).toBe(
+      'can you check\nthe first point\nthe second one\nthanks\nMarco',
+    );
   });
 
   it('returns an empty string for a missing body', () => {

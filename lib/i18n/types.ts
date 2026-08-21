@@ -80,6 +80,11 @@ export type Messages = {
     noPriority: string;
     emptyComment: string;
     goToComment: string;
+    /** Opens the whole comment in a dialog. */
+    fullComment: string;
+    fullCommentFor: (key: string) => string;
+    commentOn: (key: string) => string;
+    close: string;
     boardless: (project: string) => string;
     boardlessTooltip: (project: string) => string;
     hide: string;

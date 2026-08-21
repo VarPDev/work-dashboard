@@ -70,6 +70,10 @@ export const it: Messages = {
     noPriority: 'senza priorità',
     emptyComment: '(commento senza testo)',
     goToComment: 'vai al commento',
+    fullComment: 'Mostra tutto il commento',
+    fullCommentFor: (key) => `Mostra tutto il commento su ${key}`,
+    commentOn: (key) => `Commento su ${key}`,
+    close: 'Chiudi',
     boardless: (project) => `Senza board — ${project}`,
     boardlessTooltip: (project) =>
       `${project} — questa issue non sta su nessuna board`,

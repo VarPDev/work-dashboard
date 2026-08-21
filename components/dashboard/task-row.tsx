@@ -9,6 +9,8 @@ import {
   Undo2,
 } from 'lucide-react';
 
+import { CommentDialog } from '@/components/dashboard/comment-dialog';
+import { useClamped } from '@/components/dashboard/use-clamped';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -58,6 +60,8 @@ export function TaskRow({
 }: TaskRowProps) {
   const { issue, mention } = item;
   const canDismiss = item.kind === 'mention';
+  // The dialog trigger only shows up when the preview really is cut off.
+  const [commentRef, commentClamped] = useClamped<HTMLSpanElement>(mention?.text ?? '');
 
   return (
     <div
@@ -138,9 +142,12 @@ export function TaskRow({
             <span className="opacity-50">·</span>
             <span>{formatRelative(mention.at, tag)}</span>
             <span className="opacity-50">·</span>
-            <span className="line-clamp-2 max-w-[70ch] italic">
+            <span ref={commentRef} className="line-clamp-2 max-w-[70ch] italic">
               {mention.text || t.row.emptyComment}
             </span>
+            {commentClamped ? (
+              <CommentDialog issueKey={issue.key} mention={mention} t={t} tag={tag} />
+            ) : null}
             <a
               href={mention.commentUrl}
               target="_blank"
