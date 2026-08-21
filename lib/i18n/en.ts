@@ -90,6 +90,13 @@ export const en: Messages = {
     tryAnother: 'The search tolerates typos, but nothing here matches this text.',
   },
 
+  updates: {
+    badge: 'new',
+    badgeTooltip: 'Appeared or changed since you last looked',
+    count: (count) => `${count} new`,
+    markSeen: 'Mark as seen',
+  },
+
   hidden: {
     count: (count) =>
       `${count} hidden ${count === 1 ? 'mention' : 'mentions'} until the next comment`,

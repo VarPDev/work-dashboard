@@ -50,3 +50,4 @@ next-env.d.ts
 # local persisted state (hidden rows)
 /data/
 /.playwright-dismissals.json
+/.playwright-seen.json

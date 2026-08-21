@@ -350,6 +350,51 @@ test.describe('search', () => {
   });
 });
 
+test.describe('new since last look', () => {
+  test('badges the rows that changed, and clears when marked as seen', async ({ page }) => {
+    await page.goto('/');
+    await waitForDashboard(page);
+
+    // Acknowledge everything: from here on, nothing is new.
+    type Row = { issue: { key: string; updated: string }; mention: { commentId: string } | null };
+    const payload = (await (await page.request.get('/api/tasks')).json()) as { items: Row[] };
+    expect(payload.items.length).toBeGreaterThan(1);
+
+    // The same marker the app computes: the comment for a mention, the update
+    // time for assigned work.
+    const marker = (row: Row) =>
+      row.mention ? `comment:${row.mention.commentId}` : `updated:${row.issue.updated}`;
+
+    const all = Object.fromEntries(payload.items.map((row) => [row.issue.key, marker(row)]));
+
+    await page.request.post('/api/seen', { data: { seen: all } });
+    await page.reload();
+    await waitForDashboard(page);
+    await expect(page.locator('[data-new-badge]')).toHaveCount(0);
+    await expect(page.getByTestId('new-count')).toHaveCount(0);
+
+    // Now forget one row, which is what a fresh comment or a new issue looks
+    // like from the dashboard's point of view.
+    const partial = { ...all };
+    delete partial[payload.items[0].issue.key];
+    await page.request.post('/api/seen', { data: { seen: partial } });
+
+    await page.reload();
+    await waitForDashboard(page);
+    await expect(page.locator('[data-new-badge]')).toHaveCount(1);
+    await expect(page.getByTestId('new-count')).toContainText('1');
+
+    // Marking as seen clears it, without a refetch.
+    await page.getByRole('button', { name: /Segna come viste/ }).click();
+    await expect(page.locator('[data-new-badge]')).toHaveCount(0);
+
+    // And it stays cleared across a reload, because it is stored server-side.
+    await page.reload();
+    await waitForDashboard(page);
+    await expect(page.locator('[data-new-badge]')).toHaveCount(0);
+  });
+});
+
 test.describe('language', () => {
   test('follows the browser language, and lets you change it', async ({ page }) => {
     await page.goto('/');

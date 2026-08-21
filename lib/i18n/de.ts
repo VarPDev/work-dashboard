@@ -91,6 +91,13 @@ export const de: Messages = {
     tryAnother: 'Die Suche verzeiht Tippfehler, aber dazu passt hier nichts.',
   },
 
+  updates: {
+    badge: 'neu',
+    badgeTooltip: 'Neu oder geändert seit dem letzten Ansehen',
+    count: (count) => `${count} neu`,
+    markSeen: 'Als gesehen markieren',
+  },
+
   hidden: {
     count: (count) =>
       `${count} ausgeblendete ${count === 1 ? 'Erwähnung' : 'Erwähnungen'} bis zum nächsten Kommentar`,

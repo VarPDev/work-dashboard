@@ -97,6 +97,26 @@ integration account, not to a person. Consequences:
 - **Nothing is written back to Jira.** Hiding a row is invisible to your
   colleagues; nobody learns that you decided not to answer.
 
+## What counts as new
+
+- **A row is new when its marker changed**: the id of the comment shown for a
+  mention, the issue's `updated` value for assigned work. So a badge appears both
+  for a row that was not there and for one where somebody has since said
+  something — which is the part worth noticing.
+- **Acknowledging is explicit**, never on render: pressing refresh marks the list
+  currently on screen as seen *before* fetching, so whatever the refresh brings
+  stands out. There is also a "mark as seen" button for clearing the badges
+  without refetching.
+- **Nothing is new on a first run.** An empty state means never acknowledged, and
+  badging all 30 rows would say nothing. Badges start appearing after the first
+  refresh.
+- **Only what is on screen is stored** (`data/seen.json`, keyed by accountId), so
+  the file cannot grow forever. An issue that leaves the 30-day window and comes
+  back later is simply new again — arguably right, since you have not seen it in
+  a month.
+- A hidden row that gets a new comment loses its dismissal *and* is badged: the
+  two watermarks are the same comment id, so the chain works out.
+
 ## Search
 
 - **Fuzzy, client-side, over the items already loaded** (Fuse.js). No Jira call,

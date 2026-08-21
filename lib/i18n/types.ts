@@ -101,6 +101,14 @@ export type Messages = {
     tryAnother: string;
   };
 
+  updates: {
+    /** The badge on a row that changed since the last look. */
+    badge: string;
+    badgeTooltip: string;
+    count: (count: number) => string;
+    markSeen: string;
+  };
+
   hidden: {
     count: (count: number) => string;
     show: string;

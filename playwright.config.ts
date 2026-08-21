@@ -30,6 +30,9 @@ export default defineConfig({
     reuseExistingServer: true,
     timeout: 240_000,
     // Hidden rows are persisted to a file; keep the tests out of the real one.
-    env: { DISMISSALS_FILE: '.playwright-dismissals.json' },
+    env: {
+      DISMISSALS_FILE: '.playwright-dismissals.json',
+      SEEN_FILE: '.playwright-seen.json',
+    },
   },
 });

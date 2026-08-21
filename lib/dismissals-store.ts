@@ -12,20 +12,17 @@
  * colleague can never hide anything of yours.
  */
 
-import { mkdir, readFile, rename, writeFile } from 'node:fs/promises';
-import path from 'node:path';
-
 import { parseDismissals, type Dismissals } from './dismissals';
+import { dataFilePath, readJsonFile, serialize, writeJsonFile } from './json-store';
 
 type Store = Record<string, Dismissals>;
 
 export function dismissalsFilePath(): string {
   // Overridable so tests do not touch the real file.
-  return process.env.DISMISSALS_FILE ?? path.join(process.cwd(), 'data', 'dismissals.json');
+  return dataFilePath(process.env.DISMISSALS_FILE, 'dismissals.json');
 }
 
-function parseStore(raw: string): Store {
-  const parsed: unknown = JSON.parse(raw);
+function parseStore(parsed: unknown): Store {
   if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) return {};
 
   const store: Store = {};
@@ -35,42 +32,8 @@ function parseStore(raw: string): Store {
   return store;
 }
 
-async function readStore(): Promise<Store> {
-  try {
-    // turbopackIgnore keeps the bundler from tracing the whole project as an
-    // asset because this path is only known at runtime: it is a local data file,
-    // not something to be bundled.
-    return parseStore(await readFile(/*turbopackIgnore: true*/ dismissalsFilePath(), 'utf8'));
-  } catch (error) {
-    // A missing file is the normal first run. Anything unparseable is treated as
-    // empty rather than breaking the dashboard over hidden-row bookkeeping.
-    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return {};
-    console.warn(`[dismissals] ignoring unreadable store: ${String(error)}`);
-    return {};
-  }
-}
-
-async function writeStore(store: Store): Promise<void> {
-  const file = dismissalsFilePath();
-  await mkdir(path.dirname(file), { recursive: true });
-
-  // Write beside the target and rename, so an interrupted write cannot leave a
-  // half-written file behind.
-  const temporary = `${file}.tmp`;
-  await writeFile(temporary, `${JSON.stringify(store, null, 2)}\n`, 'utf8');
-  await rename(temporary, file);
-}
-
-/**
- * Reads and writes are serialized through this chain: two clicks in a row must
- * not race and lose one of the two.
- */
-let queue: Promise<unknown> = Promise.resolve();
-
-function serialize<T>(operation: () => Promise<T>): Promise<T> {
-  const result = queue.then(operation, operation);
-  queue = result.catch(() => undefined);
-  return result;
+function readStore(): Promise<Store> {
+  return readJsonFile(dismissalsFilePath(), parseStore, {}, 'dismissals');
 }
 
 export async function getDismissals(accountId: string): Promise<Dismissals> {
@@ -85,7 +48,7 @@ export async function setDismissal(
   return serialize(async () => {
     const store = await readStore();
     const next = { ...(store[accountId] ?? {}), [issueKey]: commentId };
-    await writeStore({ ...store, [accountId]: next });
+    await writeJsonFile(dismissalsFilePath(), { ...store, [accountId]: next });
     return next;
   });
 }
@@ -95,7 +58,7 @@ export async function removeDismissal(accountId: string, issueKey: string): Prom
     const store = await readStore();
     const next = { ...(store[accountId] ?? {}) };
     delete next[issueKey];
-    await writeStore({ ...store, [accountId]: next });
+    await writeJsonFile(dismissalsFilePath(), { ...store, [accountId]: next });
     return next;
   });
 }
@@ -103,7 +66,7 @@ export async function removeDismissal(accountId: string, issueKey: string): Prom
 export async function clearDismissals(accountId: string): Promise<Dismissals> {
   return serialize(async () => {
     const store = await readStore();
-    await writeStore({ ...store, [accountId]: {} });
+    await writeJsonFile(dismissalsFilePath(), { ...store, [accountId]: {} });
     return {};
   });
 }
@@ -115,7 +78,7 @@ export async function replaceDismissals(
 ): Promise<Dismissals> {
   return serialize(async () => {
     const store = await readStore();
-    await writeStore({ ...store, [accountId]: dismissals });
+    await writeJsonFile(dismissalsFilePath(), { ...store, [accountId]: dismissals });
     return dismissals;
   });
 }

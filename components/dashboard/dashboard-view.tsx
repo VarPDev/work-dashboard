@@ -8,6 +8,7 @@ import {
   EyeOff,
   Inbox,
   RefreshCw,
+  Sparkles,
   Undo2,
   UserCheck,
 } from 'lucide-react';
@@ -21,6 +22,7 @@ import { SearchBox } from '@/components/dashboard/search-box';
 import { TaskRow } from '@/components/dashboard/task-row';
 import { useDismissals } from '@/components/dashboard/use-dismissals';
 import { useI18n } from '@/components/dashboard/use-i18n';
+import { useSeen } from '@/components/dashboard/use-seen';
 import { ThemeToggle } from '@/components/dashboard/theme-toggle';
 import { UserPicker } from '@/components/dashboard/user-picker';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -39,6 +41,7 @@ import { isDismissed } from '@/lib/dismissals';
 import { formatAge, formatClockTime } from '@/lib/format';
 import { boardFacets } from '@/lib/grouping';
 import { buildSearchIndex, searchItems } from '@/lib/search';
+import { countNew, isNew } from '@/lib/seen';
 import type { Messages } from '@/lib/i18n';
 import { cn } from '@/lib/utils';
 
@@ -196,10 +199,15 @@ export function DashboardView() {
   const { dismissals, dismiss, restore, restoreAll, prune } = useDismissals(
     payload?.user.accountId ?? null,
   );
+  const { seen, markSeen } = useSeen(payload?.user.accountId ?? null);
 
   const refresh = async () => {
     setRefreshing(true);
     try {
+      // Acknowledge the current list before fetching: whatever the refresh
+      // brings that is not in it will then be badged as new.
+      if (payload) await markSeen(payload.items);
+
       const fresh = await loadTasks({ refresh: true });
       // Good moment to forget dismissals a newer comment has already
       // invalidated: we have fresh items, and this is a click, not a render.
@@ -235,6 +243,7 @@ export function DashboardView() {
   );
 
   const boards = useMemo(() => boardFacets(kept), [kept]);
+  const newCount = useMemo(() => countNew(kept, seen), [kept, seen]);
 
   /**
    * The index covers every item, hidden ones included, so a query narrows the
@@ -389,6 +398,23 @@ export function DashboardView() {
               </Button>
             ))}
 
+            {payload && newCount > 0 ? (
+              <>
+                <Separator orientation="vertical" className="mx-1 h-5" />
+                <Badge
+                  variant="outline"
+                  data-testid="new-count"
+                  className="h-6 gap-1 border-sky-500/50 bg-sky-500/15 px-2 text-sky-700 dark:text-sky-300"
+                >
+                  <Sparkles className="size-3" />
+                  {t.updates.count(newCount)}
+                </Badge>
+                <Button variant="ghost" size="sm" onClick={() => void markSeen(payload.items)}>
+                  {t.updates.markSeen}
+                </Button>
+              </>
+            ) : null}
+
             {payload ? (
               <>
                 <Separator orientation="vertical" className="mx-1 h-5" />
@@ -460,6 +486,7 @@ export function DashboardView() {
                 item={item}
                 t={t}
                 tag={tag}
+                isNew={isNew(item, seen)}
                 onDismiss={dismiss}
               />
             ))}

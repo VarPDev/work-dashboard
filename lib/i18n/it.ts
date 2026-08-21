@@ -92,6 +92,14 @@ export const it: Messages = {
     tryAnother: 'La ricerca tollera gli errori di battitura, ma non trova nulla con questo testo.',
   },
 
+  updates: {
+    badge: 'nuovo',
+    badgeTooltip: 'Comparso o cambiato da quando hai guardato',
+    // 'novità' is the same in the singular and the plural.
+    count: (count) => `${count} novità`,
+    markSeen: 'Segna come viste',
+  },
+
   hidden: {
     count: (count) =>
       `${count} ${count === 1 ? 'menzione nascosta' : 'menzioni nascoste'} fino al prossimo commento`,

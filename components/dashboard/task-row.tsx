@@ -37,6 +37,8 @@ const STATUS_STYLES: Record<string, string> = {
 type TaskRowProps = {
   item: DashboardItem;
   t: Messages;
+  /** Appeared or changed since the last acknowledged look. */
+  isNew?: boolean;
   /** BCP 47 tag for dates and relative times. */
   tag: string;
   /** Shown dimmed, with a restore button, when the row is a dismissed one. */
@@ -45,7 +47,15 @@ type TaskRowProps = {
   onRestore?: (issueKey: string) => void;
 };
 
-export function TaskRow({ item, t, tag, dismissed = false, onDismiss, onRestore }: TaskRowProps) {
+export function TaskRow({
+  item,
+  t,
+  tag,
+  isNew = false,
+  dismissed = false,
+  onDismiss,
+  onRestore,
+}: TaskRowProps) {
   const { issue, mention } = item;
   const canDismiss = item.kind === 'mention';
 
@@ -54,6 +64,7 @@ export function TaskRow({ item, t, tag, dismissed = false, onDismiss, onRestore 
       className={cn(
         'group grid grid-cols-[auto_1fr_auto] items-start gap-x-3 gap-y-1 border-t border-border/60 px-3 py-2 text-sm hover:bg-muted/30',
         item.overdue && !dismissed && 'bg-red-500/6 dark:bg-red-500/4',
+        isNew && !dismissed && 'border-l-2 border-l-sky-500/70',
         dismissed && 'opacity-45',
       )}
     >
@@ -91,6 +102,20 @@ export function TaskRow({ item, t, tag, dismissed = false, onDismiss, onRestore 
 
       <div className="min-w-0">
         <div className="flex items-baseline gap-2">
+          {isNew ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Badge
+                  variant="outline"
+                  data-new-badge
+                  className="h-4 shrink-0 border-sky-500/50 bg-sky-500/15 px-1 text-[9px] uppercase tracking-wide text-sky-700 dark:text-sky-300"
+                >
+                  {t.updates.badge}
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>{t.updates.badgeTooltip}</TooltipContent>
+            </Tooltip>
+          ) : null}
           <a
             href={issue.url}
             target="_blank"

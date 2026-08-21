@@ -20,6 +20,9 @@ Two sources, both computed against the selected user's `accountId`:
    you on a "fyi" line do not count, and you can hide any of them until a newer
    comment arrives.
 
+Rows that appeared or changed since your last look carry a **new** badge, so a
+refresh tells you what moved instead of leaving you to compare.
+
 Everything lands in **one flat list**, sorted by priority, then due date (missing
 dates last), then last update. The board an issue belongs to is a column on the
 row and a filter above the list, not a section heading. A fuzzy full-text search
@@ -97,6 +100,7 @@ selected.
 app/api/users       -> the picker: active human accounts, cached 1h
 app/api/tasks       -> the finished payload for one accountId, cached 30min
 app/api/dismissals  -> mentions you chose to hide, persisted on disk
+app/api/seen        -> what you have already looked at, persisted on disk
 lib/jira/*          -> Jira client, search, comments, boards, priorities (server only)
 lib/jira/mentions   -> the unanswered-mention rule, as pure functions
 lib/grouping        -> the board on each row, the tie-break, the filter facets
@@ -104,6 +108,8 @@ lib/sorting         -> priority/due-date/updated ordering
 lib/cache.ts        -> in-memory TTL cache, keyed by accountId
 lib/dismissals      -> the hide-until-next-comment rule
 lib/dismissals-store -> where hidden rows are written (data/dismissals.json)
+lib/seen*           -> what counts as new, and where that is written
+lib/json-store.ts   -> the atomic-write plumbing both stores share
 lib/theme*          -> the light/dark choice, and the script that applies it
 lib/i18n/*          -> the message dictionaries, and how a locale is chosen
 lib/search.ts       -> the fuzzy index and how a query is answered
