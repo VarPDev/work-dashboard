@@ -88,7 +88,7 @@ selected.
 
 | Command | What it does |
 | --- | --- |
-| `pnpm dev` | Dev server (port 3000, or the next free one). |
+| `pnpm dev` | Dev server on port 4310, pinned so it never fights another Next app. |
 | `pnpm probe [query] [accountId]` | Standalone Jira diagnostic: identity, which search endpoint is live, which JQL clauses work, priorities, boards, user-directory permission. `query` looks a user up; `accountId` runs the JQL matrix as that person. |
 | `pnpm test` | Unit tests (mention rule, board resolution, ordering, search, cache isolation). |
 | `pnpm test:e2e` | Browser tests against a built app. |
