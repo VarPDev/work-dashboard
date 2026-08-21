@@ -42,7 +42,7 @@ export function BoardFilter({ t, boards, selected, onToggle, onClear }: BoardFil
             data-count={board.count}
             onClick={() => onToggle(board.id)}
             className={cn(
-              'flex items-center gap-1.5 rounded-full border px-2 py-1 text-xs transition-colors',
+              'flex cursor-pointer items-center gap-1.5 rounded-full border px-2 py-1 text-xs transition-colors',
               active
                 ? 'border-primary/50 bg-primary/15 text-foreground'
                 : 'border-border text-muted-foreground hover:bg-muted/50 hover:text-foreground',

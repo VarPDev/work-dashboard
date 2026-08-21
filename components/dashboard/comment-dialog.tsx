@@ -42,7 +42,7 @@ export function CommentDialog({ issueKey, mention, t, tag }: CommentDialogProps)
             <button
               type="button"
               aria-label={t.row.fullCommentFor(issueKey)}
-              className="inline-flex h-4 items-center self-end rounded border border-border bg-muted/40 px-1 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring"
+              className="inline-flex h-4 cursor-pointer items-center self-end rounded border border-border bg-muted/40 px-1 text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-ring"
             >
               <Ellipsis className="size-3" />
             </button>

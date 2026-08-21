@@ -469,6 +469,45 @@ test.describe('language', () => {
   });
 });
 
+test('everything clickable shows the hand cursor', async ({ page }) => {
+  /**
+   * Tailwind v4 no longer sets `cursor: pointer` on a button, so every control
+   * has to ask for it. Assert it on the computed style rather than on the class
+   * lists: that is what the mouse actually reacts to.
+   */
+  const notPointer = () =>
+    page.$$eval(
+      'button, [role="button"], [role="option"], [data-slot="command-item"], a[href]',
+      (elements) =>
+        elements
+          .filter((element) => {
+            const box = element.getBoundingClientRect();
+            return box.width > 0 && box.height > 0;
+          })
+          .filter((element) => getComputedStyle(element).cursor !== 'pointer')
+          .map(
+            (element) =>
+              `${element.tagName.toLowerCase()}: ${(
+                element.getAttribute('aria-label') ||
+                element.textContent ||
+                ''
+              )
+                .replace(/\s+/g, ' ')
+                .trim()
+                .slice(0, 40)}`,
+          ),
+    );
+
+  await page.goto('/');
+  await waitForDashboard(page);
+  expect(await notPointer()).toEqual([]);
+
+  // The picker options live in a portal, so they need the popover open.
+  await page.getByRole('combobox').click();
+  await expect(page.getByRole('option').first()).toBeVisible();
+  expect(await notPointer()).toEqual([]);
+});
+
 test('never puts the token in the page', async ({ page }) => {
   await page.goto('/');
   await waitForDashboard(page);

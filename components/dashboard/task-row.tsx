@@ -271,7 +271,7 @@ export function TaskRow({
                   type="button"
                   aria-label={t.row.restoreFor(issue.key)}
                   onClick={() => onRestore?.(issue.key)}
-                  className="rounded p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground"
+                  className="cursor-pointer rounded p-0.5 text-muted-foreground hover:bg-muted hover:text-foreground"
                 >
                   <Undo2 className="size-3.5" />
                 </button>
@@ -285,7 +285,7 @@ export function TaskRow({
                   type="button"
                   aria-label={t.row.hideFor(issue.key)}
                   onClick={() => onDismiss?.(item)}
-                  className="rounded p-0.5 text-muted-foreground opacity-0 transition-opacity hover:bg-muted hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
+                  className="cursor-pointer rounded p-0.5 text-muted-foreground opacity-0 transition-opacity hover:bg-muted hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
                 >
                   <EyeOff className="size-3.5" />
                 </button>
