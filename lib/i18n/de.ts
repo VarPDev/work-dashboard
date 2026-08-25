@@ -38,6 +38,9 @@ export const de: Messages = {
     empty: 'Keine Person gefunden.',
     me: 'ich',
     directoryUnavailable: 'Benutzerliste nicht verfügbar',
+    restrictedTitle: 'Nur deine eigenen Aufgaben',
+    restrictedBody:
+      'Dem Token fehlt die globale Berechtigung „Browse users“, es kann die anderen Benutzer also nicht sehen: die Auswahl enthält nur das konfigurierte Konto.',
   },
 
   list: {
@@ -55,8 +58,8 @@ export const de: Messages = {
     loadFailed: 'Die Aufgaben können nicht geladen werden',
     retry: 'Erneut versuchen',
     byCode: {
-      'browse-users-forbidden':
-        'Jira hat die Benutzerliste abgelehnt: dem Token fehlt die globale Berechtigung „Browse users“. Die Auswahl kann nicht gefüllt werden.',
+      'other-users-hidden':
+        'Dieses Token kann die anderen Jira-Benutzer nicht sehen, es kann nur das konfigurierte Konto angezeigt werden.',
       'unknown-user': 'Kein Jira-Benutzer passt dazu. Wähle jemanden aus der Liste.',
       'jira-error': 'Jira hat mit einem Fehler geantwortet.',
       'config-error': 'Unvollständige Konfiguration: prüfe .env.local.',

@@ -38,6 +38,9 @@ export const en: Messages = {
     empty: 'No user found.',
     me: 'me',
     directoryUnavailable: 'User directory unavailable',
+    restrictedTitle: 'Only your own workload',
+    restrictedBody:
+      'The token is missing the global “Browse users” permission, so it cannot see the other users: the picker holds the configured account alone.',
   },
 
   list: {
@@ -54,8 +57,8 @@ export const en: Messages = {
     loadFailed: 'Cannot load the tasks',
     retry: 'Try again',
     byCode: {
-      'browse-users-forbidden':
-        'Jira refused the user directory: the token is missing the global “Browse users” permission. The picker cannot be filled.',
+      'other-users-hidden':
+        'This token cannot see the other Jira users, so only the configured account can be shown.',
       'unknown-user': 'No Jira user matches. Pick someone from the list.',
       'jira-error': 'Jira answered with an error.',
       'config-error': 'Incomplete configuration: check .env.local.',

@@ -38,6 +38,9 @@ export const it: Messages = {
     empty: 'Nessun utente trovato.',
     me: 'io',
     directoryUnavailable: 'Elenco utenti non disponibile',
+    restrictedTitle: 'Solo il tuo carico di lavoro',
+    restrictedBody:
+      'Al token manca il permesso globale “Browse users”, quindi non può vedere gli altri utenti: il selettore mostra solo l’account configurato.',
   },
 
   list: {
@@ -55,8 +58,8 @@ export const it: Messages = {
     loadFailed: 'Non riesco a caricare le attività',
     retry: 'Riprova',
     byCode: {
-      'browse-users-forbidden':
-        'Jira ha rifiutato l’elenco utenti: al token manca il permesso globale “Browse users”. Il selettore non può essere popolato.',
+      'other-users-hidden':
+        'Questo token non può vedere gli altri utenti Jira: si può mostrare solo l’account configurato.',
       'unknown-user': 'Nessun utente Jira corrisponde. Scegline uno dalla lista.',
       'jira-error': 'Jira ha risposto con un errore.',
       'config-error': 'Configurazione incompleta: controlla .env.local.',

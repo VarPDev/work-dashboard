@@ -7,6 +7,7 @@ import {
   CalendarX2,
   EyeOff,
   Inbox,
+  Lock,
   RefreshCw,
   Sparkles,
   Undo2,
@@ -29,7 +30,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { TooltipProvider } from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import type {
   ApiError,
   DashboardItem,
@@ -73,6 +74,12 @@ async function readJson<T>(response: Response): Promise<T | ApiError> {
 
 function isApiError(value: unknown): value is ApiError {
   return typeof value === 'object' && value !== null && 'error' in value;
+}
+
+/** Errors about the requested user, which no amount of retrying will fix. */
+function isRefusedUser(error: ApiError['error'] | string): boolean {
+  if (typeof error === 'string') return false;
+  return error.code === 'unknown-user' || error.code === 'other-users-hidden';
 }
 
 /**
@@ -302,9 +309,25 @@ export function DashboardView() {
             users={directory?.users ?? []}
             selected={selectedUser}
             defaultAccountId={directory?.defaultAccountId ?? null}
-            disabled={!directory}
+            // A restricted directory holds one account, already selected: the
+            // combobox has nothing to offer, so it is a dead control.
+            disabled={!directory || directory.restricted}
             onSelect={selectUser}
           />
+
+          {/* A permanent condition of the token, not an incident — so it gets a
+              marker and a tooltip, not a banner on every single load. */}
+          {directory?.restricted ? (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Lock className="size-3" />
+                  {t.picker.restrictedTitle}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent className="max-w-xs">{t.picker.restrictedBody}</TooltipContent>
+            </Tooltip>
+          ) : null}
 
           {payload ? (
             <div className="flex items-center gap-2 text-xs">
@@ -453,9 +476,18 @@ export function DashboardView() {
             <AlertTitle>{t.errors.loadFailed}</AlertTitle>
             <AlertDescription className="flex flex-wrap items-center gap-3">
               {errorText(taskError, t)}
-              <Button variant="secondary" size="sm" onClick={() => void loadTasks()}>
-                {t.errors.retry}
-              </Button>
+              {/* Retrying a refused accountId gets it refused again: the way out
+                  of both of these is the configured account. */}
+              {isRefusedUser(taskError) ? (
+                <Button variant="secondary" size="sm" onClick={() => router.push('/')}>
+                  <ArrowLeft className="size-3.5" />
+                  {t.viewing.backToMine}
+                </Button>
+              ) : (
+                <Button variant="secondary" size="sm" onClick={() => void loadTasks()}>
+                  {t.errors.retry}
+                </Button>
+              )}
             </AlertDescription>
           </Alert>
         ) : null}

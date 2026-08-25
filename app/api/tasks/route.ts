@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 
 import type { ApiError, DashboardPayload } from '@/lib/dashboard-types';
 import { JiraApiError } from '@/lib/jira/client';
-import { resolveTargetUser, UnknownUserError } from '@/lib/jira/users';
+import { OtherUsersHiddenError, resolveTargetUser, UnknownUserError } from '@/lib/jira/users';
 import { getDashboard } from '@/lib/tasks';
 
 export async function GET(
@@ -26,6 +26,21 @@ export async function GET(
 
     return NextResponse.json(payload);
   } catch (error) {
+    // Checked before UnknownUserError, which it extends: nothing is wrong with
+    // the id here, the token simply cannot look anybody else up.
+    if (error instanceof OtherUsersHiddenError) {
+      return NextResponse.json(
+        {
+          error: {
+            code: 'other-users-hidden',
+            message:
+              'This token cannot see the other Jira users, so only the configured account can be shown.',
+          },
+        },
+        { status: 403 },
+      );
+    }
+
     if (error instanceof UnknownUserError) {
       return NextResponse.json(
         {

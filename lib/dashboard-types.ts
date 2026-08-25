@@ -89,11 +89,16 @@ export type DashboardPayload = {
 export type UsersResponse = {
   defaultAccountId: string;
   users: SelectableUser[];
+  /**
+   * The token cannot browse users, so `users` holds the default account alone.
+   * Not an error: the dashboard works, it just has nobody else to offer.
+   */
+  restricted: boolean;
 };
 
 export type ApiError = {
   error: {
-    code: 'browse-users-forbidden' | 'unknown-user' | 'jira-error' | 'config-error';
+    code: 'other-users-hidden' | 'unknown-user' | 'jira-error' | 'config-error';
     message: string;
   };
 };

@@ -84,6 +84,11 @@ It also means **all Jira calls carry the token owner's permissions**, not the
 selected user's. A project the token cannot see is invisible here, whoever is
 selected.
 
+If the token also lacks the global **"Browse users"** permission, the user picker
+cannot be filled. That is not fatal: the dashboard falls back to
+`JIRA_DEFAULT_ACCOUNT_ID` alone and works normally for that one account. See
+`NOTES.md`.
+
 ## Commands
 
 | Command | What it does |

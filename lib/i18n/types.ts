@@ -50,6 +50,9 @@ export type Messages = {
     empty: string;
     me: string;
     directoryUnavailable: string;
+    /** The token cannot browse users, so there is nobody else to pick. */
+    restrictedTitle: string;
+    restrictedBody: string;
   };
 
   list: {
@@ -66,7 +69,7 @@ export type Messages = {
     loadFailed: string;
     retry: string;
     byCode: {
-      'browse-users-forbidden': string;
+      'other-users-hidden': string;
       'unknown-user': string;
       'jira-error': string;
       'config-error': string;

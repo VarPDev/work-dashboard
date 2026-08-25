@@ -15,6 +15,26 @@ integration account, not to a person. Consequences:
 - `JIRA_DEFAULT_ACCOUNT_ID` has to be configured, because "me" cannot be derived
   from the token.
 
+## A token without "Browse users"
+
+The picker is filled from `/rest/api/3/users/search`, which needs the global
+"Browse users" permission. A token without it gets a 403 there — and used to take
+the whole dashboard down with it, because `resolveTargetUser` validates every
+requested `accountId` against that same list.
+
+It now degrades instead: the directory falls back to `JIRA_DEFAULT_ACCOUNT_ID`
+alone, the picker shows that one account and is disabled, and everything else
+works unchanged — JQL is parameterised on an `accountId` and needs no directory.
+
+- The name and avatar come from `/rest/api/3/myself`, which needs no permission,
+  when the token *is* the configured account. Otherwise a single lookup is tried,
+  and if that is refused too the picker shows the raw `accountId`: honest, and
+  the only thing left to show.
+- `?user=<somebody else>` is refused with `other-users-hidden` rather than run.
+  Without the directory there is nothing left to check the id against, and JQL
+  answers 200 with an empty list for an id that does not exist — a plausible,
+  entirely wrong, empty dashboard.
+
 ## Mentions
 
 - **The window is on `updated`, not on the mention.** A candidate is an issue
