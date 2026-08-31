@@ -26,6 +26,7 @@ function item(
           text: options.mentionText ?? '',
           at: '2026-08-01T10:00:00.000+0200',
           commentUrl: 'https://example.invalid/c/1',
+          informational: false,
         }
       : null;
 

@@ -68,6 +68,7 @@ export const de: Messages = {
 
   row: {
     mentionBadge: 'Unbeantwortete Erwähnung',
+    informationalBadge: 'Nur zur Information (fyi / cc)',
     assignedBadge: 'Dieser Person zugewiesen',
     noAssignee: 'Niemand zugewiesen',
     noPriority: 'keine Priorität',
@@ -112,6 +113,15 @@ export const de: Messages = {
     show: 'Anzeigen',
     conceal: 'Ausblenden',
     restoreAll: 'Alle wiederherstellen',
+  },
+
+  informational: {
+    count: (count) =>
+      `${count} ${count === 1 ? 'Erwähnung' : 'Erwähnungen'} nur zur Information (fyi / cc)`,
+    show: 'Anzeigen',
+    conceal: 'Ausblenden',
+    tooltip:
+      'Du wurdest über eine „fyi“- oder „cc“-Zeile informiert: nichts zu beantworten, der Kommentar steht aber hier.',
   },
 
   diagnostics: {

@@ -68,6 +68,7 @@ export const it: Messages = {
 
   row: {
     mentionBadge: 'Menzione senza risposta',
+    informationalBadge: 'Solo per conoscenza (fyi / cc)',
     assignedBadge: 'Assegnata',
     noAssignee: 'Nessun assegnatario',
     noPriority: 'senza priorità',
@@ -114,6 +115,15 @@ export const it: Messages = {
     show: 'Mostra',
     conceal: 'Nascondi',
     restoreAll: 'Ripristina tutte',
+  },
+
+  informational: {
+    count: (count) =>
+      `${count} ${count === 1 ? 'menzione' : 'menzioni'} solo per conoscenza (fyi / cc)`,
+    show: 'Mostra',
+    conceal: 'Nascondi',
+    tooltip:
+      'Ti hanno messo in copia con una riga “fyi” o “cc”: non c’è niente da rispondere, ma il commento è qui.',
   },
 
   diagnostics: {

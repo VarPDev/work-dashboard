@@ -38,6 +38,7 @@ function mention(key: string, commentId: string): DashboardItem {
       text: 'can you look at this?',
       at: '2026-08-01T10:00:00.000+0200',
       commentUrl: `https://example.invalid/browse/${key}?focusedCommentId=${commentId}`,
+      informational: false,
     },
   };
 }

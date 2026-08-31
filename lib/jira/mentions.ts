@@ -6,8 +6,13 @@
  * mention. Status transitions do not count.
  */
 
-import { bodyAddressesAccount, bodyMentionsAccount, bodyToPlainText } from './adf';
-import type { JiraComment, JiraUser } from './types';
+import {
+  bodyAddressesAccount,
+  bodyInformsAccount,
+  bodyMentionsAccount,
+  bodyToPlainText,
+} from './adf';
+import type { AdfNode, JiraComment, JiraUser } from './types';
 
 export type MentionAnalysis = {
   mentionedBy: JiraUser;
@@ -16,6 +21,12 @@ export type MentionAnalysis = {
   commentId: string;
   /** True when the target user commented after being mentioned. */
   replied: boolean;
+  /**
+   * True when the mention only keeps the user in the loop — a "fyi" / "cc"
+   * line. Nothing is being asked, so it belongs in its own quiet group rather
+   * than in the list of things to answer.
+   */
+  informational: boolean;
 };
 
 function byCreatedAscending(a: JiraComment, b: JiraComment): number {
@@ -26,39 +37,29 @@ function byCreatedAscending(a: JiraComment, b: JiraComment): number {
   return Number(a.id) - Number(b.id);
 }
 
-/**
- * Find the most recent comment that actually asks `accountId` something, and
- * report whether they have commented since.
- *
- * Two kinds of mention do not count:
- *  - ones the target user wrote themselves — tagging yourself, or quoting a
- *    thread you are part of, owes nobody an answer;
- *  - ones that only appear on a "fyi" / "cc" line, which keep you in the loop
- *    rather than ask you anything.
- */
-export function analyzeMentions(
-  comments: readonly JiraComment[],
+/** Mentions the target user wrote themselves never count: see `analyzeMentions`. */
+function lastMentionIndex(
+  ordered: readonly JiraComment[],
   accountId: string,
-): MentionAnalysis | null {
-  if (!accountId) return null;
-
-  const ordered = [...comments].sort(byCreatedAscending);
-
-  let lastMentionIndex = -1;
+  matches: (body: AdfNode | string | undefined, accountId: string) => boolean,
+): number {
   for (let index = ordered.length - 1; index >= 0; index -= 1) {
     const comment = ordered[index];
     if (comment.author?.accountId === accountId) continue;
-    if (bodyAddressesAccount(comment.body, accountId)) {
-      lastMentionIndex = index;
-      break;
-    }
+    if (matches(comment.body, accountId)) return index;
   }
+  return -1;
+}
 
-  if (lastMentionIndex === -1) return null;
-
-  const mention = ordered[lastMentionIndex];
+function analysisAt(
+  ordered: readonly JiraComment[],
+  index: number,
+  accountId: string,
+  informational: boolean,
+): MentionAnalysis {
+  const mention = ordered[index];
   const replied = ordered
-    .slice(lastMentionIndex + 1)
+    .slice(index + 1)
     .some((comment) => comment.author?.accountId === accountId);
 
   return {
@@ -67,7 +68,50 @@ export function analyzeMentions(
     mentionedAt: mention.created,
     commentId: mention.id,
     replied,
+    informational,
   };
+}
+
+/**
+ * Find the most recent comment that actually asks `accountId` something, and
+ * report whether they have commented since.
+ *
+ * Two kinds of mention do not count:
+ *  - ones the target user wrote themselves — tagging yourself, or quoting a
+ *    thread you are part of, owes nobody an answer;
+ *  - ones that only appear on a "fyi" / "cc" line, which keep you in the loop
+ *    rather than ask you anything. Those are not lost: they are what
+ *    `analyzeInformationalMention` reports.
+ */
+export function analyzeMentions(
+  comments: readonly JiraComment[],
+  accountId: string,
+): MentionAnalysis | null {
+  if (!accountId) return null;
+
+  const ordered = [...comments].sort(byCreatedAscending);
+  const index = lastMentionIndex(ordered, accountId, bodyAddressesAccount);
+
+  return index === -1 ? null : analysisAt(ordered, index, accountId, false);
+}
+
+/**
+ * The most recent "fyi" / "cc" mention: nothing is being asked, but being kept
+ * in the loop is still worth seeing, so it gets reported instead of dropped.
+ *
+ * Independent of `analyzeMentions` on purpose — the caller asks for a question
+ * first and falls back to this, so a thread that does both is a question.
+ */
+export function analyzeInformationalMention(
+  comments: readonly JiraComment[],
+  accountId: string,
+): MentionAnalysis | null {
+  if (!accountId) return null;
+
+  const ordered = [...comments].sort(byCreatedAscending);
+  const index = lastMentionIndex(ordered, accountId, bodyInformsAccount);
+
+  return index === -1 ? null : analysisAt(ordered, index, accountId, true);
 }
 
 /** The mention only if it is still waiting for an answer. */

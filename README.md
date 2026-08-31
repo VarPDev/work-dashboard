@@ -17,8 +17,9 @@ Two sources, both computed against the selected user's `accountId`:
 1. **Assigned** — issues assigned to them that are not in a final status.
 2. **Unanswered mentions** — issues *not* assigned to them where they were
    mentioned in a comment and have not commented since. Mentions that only put
-   you on a "fyi" line do not count, and you can hide any of them until a newer
-   comment arrives.
+   you on a "fyi" / "cc" line ask nothing, so they are collected in a closed
+   group of their own at the bottom instead of in the list; and you can hide any
+   mention until a newer comment arrives.
 
 Rows that appeared or changed since your last look carry a **new** badge, and one
 of the filters keeps only those — so a refresh tells you what moved instead of
@@ -141,8 +142,10 @@ bundle.
 - **"Answered" means a comment**, by the target user, after the last mention.
   Status transitions do not count.
 - **A mention on a "fyi" line is not a question.** If the line holding the
-  mention contains nothing but `fyi` / `cc` / `per conoscenza` and other
-  mentions, it counts as being kept informed and is dropped from the list.
+  mention contains nothing but `fyi` / `cc` / `in copia` / `per conoscenza` and
+  other mentions, it counts as being kept informed: it leaves the list and the
+  counters, and goes into its own collapsed group instead — never hidden, just
+  not filed as work. The comment is readable there like any other.
 - **Mentions on closed issues stay**, as long as they are unanswered.
 - **A mention you hide stays hidden until a newer comment mentions you.** The
   dismissal records which comment it applied to, so anything new brings the row

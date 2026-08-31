@@ -67,6 +67,7 @@ export const en: Messages = {
 
   row: {
     mentionBadge: 'Unanswered mention',
+    informationalBadge: 'For information only (fyi / cc)',
     assignedBadge: 'Assigned to this person',
     noAssignee: 'No assignee',
     noPriority: 'no priority',
@@ -111,6 +112,15 @@ export const en: Messages = {
     show: 'Show',
     conceal: 'Hide',
     restoreAll: 'Restore all',
+  },
+
+  informational: {
+    count: (count) =>
+      `${count} ${count === 1 ? 'mention' : 'mentions'} for information only (fyi / cc)`,
+    show: 'Show',
+    conceal: 'Hide',
+    tooltip:
+      'You were kept in the loop on a “fyi” or “cc” line: nothing to answer, but the comment is right here.',
   },
 
   diagnostics: {

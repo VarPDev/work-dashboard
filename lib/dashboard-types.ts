@@ -38,6 +38,12 @@ export type DashboardMention = {
   text: string;
   at: string;
   commentUrl: string;
+  /**
+   * The mention only keeps the user in the loop — a "fyi" / "cc" line. Nothing
+   * is being asked, so the UI files it under its own collapsed group instead of
+   * mixing it into the work.
+   */
+  informational: boolean;
 };
 
 export type ItemBoard = {
@@ -66,7 +72,7 @@ export type DashboardDiagnostics = {
   jiraCalls: number;
   mentionCandidates: number;
   mentionsAlreadyAnswered: number;
-  /** Mentioned only on a "fyi" line, so nothing is being asked. */
+  /** Shown, but only on a "fyi" line: kept in the loop, not asked anything. */
   mentionsInformationalOnly: number;
   mentionFalsePositives: number;
   truncatedThreads: string[];
@@ -80,7 +86,8 @@ export type DashboardPayload = {
   /** Whether this user is the configured default — "me". */
   isDefaultUser: boolean;
   generatedAt: string;
-  totals: { assigned: number; mentions: number; overdue: number };
+  /** `mentions` counts the ones that ask something; "fyi" lines are `informational`. */
+  totals: { assigned: number; mentions: number; informational: number; overdue: number };
   /** One flat list, already sorted. Board is a column and a filter, not a section. */
   items: DashboardItem[];
   diagnostics: DashboardDiagnostics;

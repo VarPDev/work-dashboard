@@ -5,6 +5,7 @@ import {
   CalendarClock,
   EyeOff,
   ExternalLink,
+  Info,
   MessageSquareReply,
   Undo2,
 } from 'lucide-react';
@@ -74,7 +75,18 @@ export function TaskRow({
     >
       {/* Which source this row comes from — the whole point of the dashboard. */}
       <div className="flex items-center gap-2 pt-0.5">
-        {item.kind === 'mention' ? (
+        {/* A "fyi" mention is a mention too, but it asks nothing: it says so
+            quietly, in grey, instead of wearing the violet of open work. */}
+        {mention?.informational ? (
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className="flex size-5 items-center justify-center rounded border border-border bg-muted/50 text-muted-foreground">
+                <Info className="size-3" />
+              </span>
+            </TooltipTrigger>
+            <TooltipContent>{t.row.informationalBadge}</TooltipContent>
+          </Tooltip>
+        ) : item.kind === 'mention' ? (
           <Tooltip>
             <TooltipTrigger asChild>
               <span className="flex size-5 items-center justify-center rounded border border-violet-500/40 bg-violet-500/15 text-violet-700 dark:text-violet-300">
@@ -138,7 +150,13 @@ export function TaskRow({
 
         {mention ? (
           <div className="mt-1 flex flex-wrap items-baseline gap-x-2 gap-y-1 text-xs text-muted-foreground">
-            <span className="text-violet-700 dark:text-violet-300">{mention.byDisplayName}</span>
+            <span
+              className={cn(
+                !mention.informational && 'text-violet-700 dark:text-violet-300',
+              )}
+            >
+              {mention.byDisplayName}
+            </span>
             <span className="opacity-50">·</span>
             <span>{formatRelative(mention.at, tag)}</span>
             <span className="opacity-50">·</span>

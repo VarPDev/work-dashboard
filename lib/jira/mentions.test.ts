@@ -3,11 +3,17 @@ import { describe, expect, it } from 'vitest';
 import {
   accountMentions,
   bodyAddressesAccount,
+  bodyInformsAccount,
   bodyMentionsAccount,
   bodyToPlainText,
   mentionedAccountIds,
 } from './adf';
-import { analyzeMentions, findUnansweredMention, threadMentionsAccount } from './mentions';
+import {
+  analyzeInformationalMention,
+  analyzeMentions,
+  findUnansweredMention,
+  threadMentionsAccount,
+} from './mentions';
 import type { AdfNode, JiraComment } from './types';
 
 import edgeCases from './__fixtures__/edge-cases.json';
@@ -112,6 +118,106 @@ describe('fyi and cc lines do not need an answer', () => {
       { informational: false },
     ]);
     expect(accountMentions(threads.otherUserMentioned[0].body, TARGET)).toEqual([]);
+  });
+});
+
+/** A whole comment that is nothing but `<marker> @Target User`. */
+function markerBody(marker: string): AdfNode {
+  return {
+    type: 'doc',
+    content: [
+      {
+        type: 'paragraph',
+        content: [
+          { type: 'text', text: `${marker} ` },
+          { type: 'mention', attrs: { id: TARGET, text: '@Target User' } },
+        ],
+      },
+    ],
+  };
+}
+
+describe('the spellings of a "for information" line', () => {
+  it('takes cc exactly as it takes fyi', () => {
+    for (const marker of ['cc', 'CC:', 'in cc', 'cc a', 'cc anche', 'in copia']) {
+      expect(bodyInformsAccount(markerBody(marker), TARGET)).toBe(true);
+      expect(bodyAddressesAccount(markerBody(marker), TARGET)).toBe(false);
+    }
+  });
+
+  it('covers the same forms in the other two languages', () => {
+    for (const marker of ['fyi', 'FYI', 'per conoscenza', 'for information', 'zur Kenntnisnahme']) {
+      expect(bodyInformsAccount(markerBody(marker), TARGET)).toBe(true);
+    }
+  });
+
+  it('stops at the first real word, marker or not', () => {
+    for (const marker of ['cc for the deploy', 'fyi can you check', 'in copia trovi il file']) {
+      expect(bodyInformsAccount(markerBody(marker), TARGET)).toBe(false);
+      expect(bodyAddressesAccount(markerBody(marker), TARGET)).toBe(true);
+    }
+  });
+
+  it('is not informational when the account is not mentioned at all', () => {
+    expect(bodyInformsAccount(threads.otherUserMentioned[0].body, TARGET)).toBe(false);
+    expect(bodyInformsAccount(undefined, TARGET)).toBe(false);
+  });
+
+  it('lets one question outweigh a cc in the same comment', () => {
+    // Being cc'd at the bottom does not undo a question further up.
+    expect(bodyInformsAccount(threads.fyiThatStillAsks[0].body, TARGET)).toBe(false);
+  });
+});
+
+/**
+ * The "fyi" mentions are not dropped any more: they are reported separately, so
+ * the UI can file them under their own group instead of hiding them.
+ */
+describe('mentions kept only for information', () => {
+  it('reports the fyi mention that analyzeMentions refuses', () => {
+    const analysis = analyzeInformationalMention(threads.fyiLineAfterRequest, TARGET);
+    expect(analyzeMentions(threads.fyiLineAfterRequest, TARGET)).toBeNull();
+    expect(analysis?.informational).toBe(true);
+    expect(analysis?.replied).toBe(false);
+    expect(analysis?.commentId).toBe(threads.fyiLineAfterRequest[0].id);
+    // The whole comment is there to read, request line included.
+    expect(analysis?.mentionText).toContain('fyi');
+  });
+
+  it('reports a cc line the same way', () => {
+    expect(analyzeInformationalMention(threads.ccLine, TARGET)?.informational).toBe(true);
+    expect(analyzeInformationalMention(threads.perConoscenza, TARGET)?.informational).toBe(true);
+    expect(analyzeInformationalMention(threads.wikiFyiLine, TARGET)?.informational).toBe(true);
+  });
+
+  it('finds nothing where the mention actually asks something', () => {
+    expect(analyzeInformationalMention(threads.mentionNestedDeep, TARGET)).toBeNull();
+    expect(analyzeInformationalMention(threads.fyiThatStillAsks, TARGET)).toBeNull();
+  });
+
+  it('ignores a fyi the target user wrote themselves', () => {
+    expect(analyzeInformationalMention(threads.selfMentionOnly, TARGET)).toBeNull();
+  });
+
+  it('leaves the choice to the caller when a thread does both', () => {
+    // Asked at 26, then merely kept in the loop: the question is the answer the
+    // scan wants, and it is the one it asks for first.
+    expect(analyzeMentions(threads.askedThenFyi, TARGET)?.commentId).toBe('26');
+    expect(analyzeInformationalMention(threads.askedThenFyi, TARGET)?.commentId).not.toBe('26');
+  });
+
+  it('counts a later comment of your own as having read it', () => {
+    const read: JiraComment[] = [
+      threads.fyiLineAfterRequest[0],
+      {
+        ...threads.mentionThenReply[1],
+        id: '900',
+        created: '2026-08-20T09:00:00.000+0200',
+      },
+    ];
+
+    expect(read[1].author.accountId).toBe(TARGET);
+    expect(analyzeInformationalMention(read, TARGET)?.replied).toBe(true);
   });
 });
 

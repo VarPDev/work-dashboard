@@ -12,7 +12,12 @@ import { mapWithConcurrency } from '@/lib/concurrency';
 import { fetchRecentComments } from './comments';
 import { getJiraConfig } from './env';
 import { mentionCandidatesJql } from './jql';
-import { analyzeMentions, threadMentionsAccount, type MentionAnalysis } from './mentions';
+import {
+  analyzeInformationalMention,
+  analyzeMentions,
+  threadMentionsAccount,
+  type MentionAnalysis,
+} from './mentions';
 import { searchIssues } from './search';
 import type { JiraIssue, JiraUser } from './types';
 
@@ -27,6 +32,8 @@ export type UnansweredMention = {
   /** Identifies which mention this is, so a dismissal can expire on a newer one. */
   commentId: string;
   commentUrl: string;
+  /** Only kept in the loop — a "fyi" / "cc" line, nothing to answer. */
+  informational: boolean;
 };
 
 export type UnansweredMentionsResult = {
@@ -35,7 +42,7 @@ export type UnansweredMentionsResult = {
   candidateCount: number;
   /** Candidates where the mention exists but was already answered. */
   answeredCount: number;
-  /** Candidates where the target only appears on a "fyi" line. */
+  /** Of the mentions returned, the ones that only keep the target in the loop. */
   informationalOnlyCount: number;
   /** Candidates dropped because `comment ~` matched text that is not a mention. */
   falsePositiveCount: number;
@@ -51,6 +58,10 @@ function commentUrl(baseUrl: string, issueKey: string, commentId: string): strin
  * Scan one candidate. Pages backwards through the thread until the mention is
  * found, because a mention found on page 1 already has every later comment in
  * hand — which is what decides "replied".
+ *
+ * A question wins over a "fyi" / "cc" mention, and is worth digging for: the
+ * paging only settles for the informational one once the whole thread is in
+ * hand, or the scan gives up on it.
  */
 async function scanCandidate(
   issue: JiraIssue,
@@ -65,11 +76,14 @@ async function scanCandidate(
     // hand, so whether it was answered is decided.
     if (analysis) return { analysis, mentionedAtAll: true, truncated: false };
 
-    // No mention in what we have: if the whole thread is here that is final,
-    // otherwise reach further back.
+    // Nobody asked anything in what we have: if the whole thread is here that
+    // is final, otherwise reach further back for a real question.
+    const informational = analyzeInformationalMention(comments, accountId);
     const mentionedAtAll = threadMentionsAccount(comments, accountId);
-    if (!truncated) return { analysis: null, mentionedAtAll, truncated: false };
-    if (pages === MAX_COMMENT_PAGES) return { analysis: null, mentionedAtAll, truncated: true };
+    if (!truncated) return { analysis: informational, mentionedAtAll, truncated: false };
+    if (pages === MAX_COMMENT_PAGES) {
+      return { analysis: informational, mentionedAtAll, truncated: true };
+    }
   }
 
   return { analysis: null, mentionedAtAll: false, truncated: true };
@@ -102,18 +116,21 @@ export async function getUnansweredMentions(
     if (scan.truncated) truncatedThreads.push(issue.key);
 
     if (!scan.analysis) {
-      // Mentioned, but never actually asked anything: a "fyi" line, or only
-      // self-mentions. Otherwise `comment ~ accountId` matched plain text that
-      // is not a mention node at all.
-      if (scan.mentionedAtAll) informationalOnlyCount += 1;
-      else falsePositiveCount += 1;
+      // No mention this rule can read. Either only self-mentions, or
+      // `comment ~ accountId` matched plain text that is not a mention node at
+      // all — the second is the one worth watching, so they are told apart.
+      if (!scan.mentionedAtAll) falsePositiveCount += 1;
       return;
     }
 
+    // A comment of your own after the mention settles it either way: an answer
+    // to a question, and proof you have read a "fyi".
     if (scan.analysis.replied) {
       answeredCount += 1;
       return;
     }
+
+    if (scan.analysis.informational) informationalOnlyCount += 1;
 
     mentions.push({
       issue,
@@ -122,6 +139,7 @@ export async function getUnansweredMentions(
       mentionedAt: scan.analysis.mentionedAt,
       commentId: scan.analysis.commentId,
       commentUrl: commentUrl(baseUrl, issue.key, scan.analysis.commentId),
+      informational: scan.analysis.informational,
     });
   });
 

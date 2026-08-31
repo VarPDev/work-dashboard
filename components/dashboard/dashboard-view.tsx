@@ -7,6 +7,7 @@ import {
   CalendarX2,
   EyeOff,
   Inbox,
+  Info,
   Lock,
   RefreshCw,
   Sparkles,
@@ -52,6 +53,18 @@ const FILTER_IDS: Filter[] = ['all', 'assigned', 'mentions', 'overdue', 'new'];
 
 /** Past this age the label turns amber, as a nudge to hit refresh. */
 const STALE_AFTER_MINUTES = 15;
+
+/**
+ * Mentioned on a "fyi" / "cc" line: kept in the loop, asked nothing.
+ *
+ * These used to be dropped on the server. They are shown now, but away from the
+ * work: out of the list and out of every counter on screen — those describe what
+ * is waiting for an answer — and into their own group at the bottom, closed
+ * until it is opened.
+ */
+function isInformational(item: DashboardItem): boolean {
+  return item.mention?.informational === true;
+}
 
 function matchesFilter(item: DashboardItem, filter: Filter, isNewRow: boolean): boolean {
   switch (filter) {
@@ -118,6 +131,7 @@ export function DashboardView() {
   const [filter, setFilter] = useState<Filter>('all');
   const [boardFilter, setBoardFilter] = useState<Set<string>>(new Set());
   const [showHidden, setShowHidden] = useState(false);
+  const [showInformational, setShowInformational] = useState(false);
   const [query, setQuery] = useState('');
 
   // Ticks so the "how old is this" label keeps telling the truth on a tab left
@@ -236,11 +250,15 @@ export function DashboardView() {
   /**
    * Dismissed rows are excluded from the list, the totals and the board counts:
    * a header saying "24 menzioni" while three of them are hidden would be a lie.
+   * "fyi" mentions are out for the same reason — they have their own group and
+   * their own count.
    */
-  const kept = useMemo(
+  const keptAll = useMemo(
     () => (payload ? payload.items.filter((item) => !isDismissed(item, dismissals)) : []),
     [payload, dismissals],
   );
+
+  const kept = useMemo(() => keptAll.filter((item) => !isInformational(item)), [keptAll]);
 
   const totals = useMemo(
     () => ({
@@ -252,7 +270,12 @@ export function DashboardView() {
   );
 
   const boards = useMemo(() => boardFacets(kept), [kept]);
-  const newCount = useMemo(() => countNew(kept, seen), [kept, seen]);
+  /**
+   * "New" answers what moved since the last look, not how much work there is, so
+   * this one counter does span the fyi group — where the rows carry the badge
+   * too, and a count that ignored them would contradict them.
+   */
+  const newCount = useMemo(() => countNew(keptAll, seen), [keptAll, seen]);
 
   /**
    * The index covers every item, hidden ones included, so a query narrows the
@@ -276,7 +299,24 @@ export function DashboardView() {
   );
 
   const visibleItems = useMemo(
-    () => matched.filter((item) => !isDismissed(item, dismissals) && passesFilters(item)),
+    () =>
+      matched.filter(
+        (item) =>
+          !isDismissed(item, dismissals) && !isInformational(item) && passesFilters(item),
+      ),
+    [matched, dismissals, passesFilters],
+  );
+
+  /**
+   * The "fyi" group. Search, filters and the board selection reach it exactly
+   * like the list above, so a query narrows both — it is a second list, not a
+   * pocket the filters cannot see into.
+   */
+  const informationalItems = useMemo(
+    () =>
+      matched.filter(
+        (item) => !isDismissed(item, dismissals) && isInformational(item) && passesFilters(item),
+      ),
     [matched, dismissals, passesFilters],
   );
 
@@ -494,7 +534,11 @@ export function DashboardView() {
 
         {loading ? <DashboardSkeleton label={t.list.loading} /> : null}
 
-        {!loading && !taskError && payload && visibleItems.length === 0 ? (
+        {!loading &&
+        !taskError &&
+        payload &&
+        visibleItems.length === 0 &&
+        informationalItems.length === 0 ? (
           <div className="rounded-md border border-dashed border-border px-6 py-16 text-center">
             <p className="font-medium">
               {payload.items.length === 0
@@ -525,6 +569,46 @@ export function DashboardView() {
                 onDismiss={dismiss}
               />
             ))}
+          </div>
+        ) : null}
+
+        {/* Kept in the loop, not asked anything. Closed by default, because it is
+            not work — but the comment itself is one click away. */}
+        {!loading && !taskError && informationalItems.length > 0 ? (
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+              <Info className="size-3.5" />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span className="cursor-help underline decoration-dotted underline-offset-2">
+                    {t.informational.count(informationalItems.length)}
+                  </span>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">{t.informational.tooltip}</TooltipContent>
+              </Tooltip>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setShowInformational((show) => !show)}
+              >
+                {showInformational ? t.informational.conceal : t.informational.show}
+              </Button>
+            </div>
+
+            {showInformational ? (
+              <div className="overflow-hidden rounded-md border border-dashed border-border bg-card">
+                {informationalItems.map((item) => (
+                  <TaskRow
+                    key={`informational:${item.issue.key}`}
+                    item={item}
+                    t={t}
+                    tag={tag}
+                    isNew={isNew(item, seen)}
+                    onDismiss={dismiss}
+                  />
+                ))}
+              </div>
+            ) : null}
           </div>
         ) : null}
 

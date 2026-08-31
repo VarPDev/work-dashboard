@@ -19,12 +19,16 @@ import type { AdfNode } from './types';
  *   @Alice can you please update this ticket?
  *   fyi @Bob @Carol @Dave
  *
- * Deliberately strict: the marker has to be the whole line. "fyi @Alice can you
- * check" still counts as addressed, because wrongly hiding a real question
- * is far worse than showing one notification too many.
+ * `cc` is the same thing under another name, and on the measured instance it is
+ * the second most common form after `fyi` — both spellings are one list.
+ *
+ * Deliberately strict: the marker has to be the whole line, an "a"/"anche"-style
+ * filler aside. "fyi @Alice can you check" still counts as addressed, because
+ * wrongly hiding a real question is far worse than showing one notification too
+ * many.
  */
 const INFORMATIONAL_ONLY =
-  /^[\s([]*(fyi|f\.y\.i\.?|cc|in cc|per info(rmazione|rmazioni)?|per conoscenza|solo per info(rmazione)?|for info(rmation)?|for your information|for awareness|zur info(rmation)?|nur zur info(rmation)?)[\s:;,.\-–>)\]]*$/i;
+  /^[\s([]*(fyi|f\.y\.i\.?|cc|in cc|in copia|per info(rmazione|rmazioni)?|per (copia )?conoscenza|solo per info(rmazione)?|for info(rmation)?|for your information|for awareness|zur info(rmation)?|nur zur info(rmation)?|zur kenntnis(nahme)?)( (a|ad|anche|also|auch|to))?[\s:;,.\-–>)\]]*$/i;
 
 /** Inline node types: everything else opens a new line of its own. */
 const INLINE_TYPES = new Set([
@@ -141,6 +145,19 @@ export function bodyAddressesAccount(
   accountId: string,
 ): boolean {
   return accountMentions(body, accountId).some((mention) => !mention.informational);
+}
+
+/**
+ * The mirror image: this comment mentions the account, and *only* to keep it in
+ * the loop. One mention that asks something is enough to disqualify the whole
+ * comment — being cc'd at the bottom does not undo a question further up.
+ */
+export function bodyInformsAccount(
+  body: AdfNode | string | undefined,
+  accountId: string,
+): boolean {
+  const mentions = accountMentions(body, accountId);
+  return mentions.length > 0 && mentions.every((mention) => mention.informational);
 }
 
 /** Does this comment body mention the given account? */

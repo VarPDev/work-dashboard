@@ -35,6 +35,7 @@ function mentionItem(key: string, commentId: string): DashboardItem {
       text: 'fyi',
       at: '2026-08-01T10:00:00.000+0200',
       commentUrl: `https://example.invalid/browse/${key}?focusedCommentId=${commentId}`,
+      informational: false,
     },
     overdue: false,
     dueSoon: false,

@@ -78,6 +78,8 @@ export type Messages = {
 
   row: {
     mentionBadge: string;
+    /** A mention on a "fyi" / "cc" line: nothing to answer. */
+    informationalBadge: string;
     assignedBadge: string;
     noAssignee: string;
     noPriority: string;
@@ -123,6 +125,14 @@ export type Messages = {
     show: string;
     conceal: string;
     restoreAll: string;
+  };
+
+  /** The "fyi" / "cc" mentions, kept out of the list but never dropped. */
+  informational: {
+    count: (count: number) => string;
+    show: string;
+    conceal: string;
+    tooltip: string;
   };
 
   diagnostics: {

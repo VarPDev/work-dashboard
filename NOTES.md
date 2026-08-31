@@ -47,19 +47,28 @@ works unchanged — JQL is parameterised on an `accountId` and needs no director
   row is what tells them apart. Change `mentionCandidatesJql` in
   `lib/jira/jql.ts` if that stops being useful.
 - **"fyi" lines are not questions.** A mention whose line contains nothing but a
-  marker — `fyi`, `cc`, `per conoscenza` and friends — is being kept in the loop,
-  not asked anything, so it is excluded. On the real data this drops 16 of 50
-  candidates, taking the list from 41 items to 24.
+  marker — `fyi`, `cc`, `in copia`, `per conoscenza` and friends — is being kept
+  in the loop, not asked anything, so it leaves the list and the counters and
+  goes into a group of its own, closed until it is opened. Measured in August
+  2026: of 42 candidates, 19 are real mentions, 14 are "for information", 9 were
+  already answered and 0 were false positives.
+- **They used to be dropped entirely.** They are only set aside now: on this data
+  that group holds 14 rows, several of them worth reading (a go-live date, a
+  deployment window), which is exactly why hiding them was the wrong answer.
 - **That rule is deliberately narrow.** The marker has to be the whole line,
-  mentions aside. `fyi @Alice can you confirm?` still counts as a question,
-  because hiding a real request is worse than showing one notification too many.
+  mentions aside — an `a` / `anche` / `also` filler is tolerated, a real word is
+  not. `fyi @Alice can you confirm?` still counts as a question, because filing a
+  real request away is worse than showing one notification too many.
+- **One question outweighs any number of cc's** in the same comment. Real case
+  measured here: `…as @Target writes…` in one paragraph and `fyi @Target` in the
+  next — the comment asks something, so it stays in the list.
 - **Being talked about is not being asked.** `@Alice I spoke with @Bob and he
   also suggested…` mentions the target in the third person and still shows up.
   Telling that apart from a real request means reading the sentence, not the
   structure, so it is out of scope.
-- **24 unanswered mentions is still a real backlog**, not a detection bug: false
-  positives measured 0, and the 10 already-answered ones were correctly
-  excluded.
+- **19 unanswered mentions is still a real backlog**, not a detection bug: false
+  positives measured 0, and the 9 already-answered ones were correctly excluded —
+  a comment of your own after a "fyi" counts as having read it, too.
 - **`comment ~ "<accountId>"` is a text match.** It happens to work on this
   instance because mention accountIds are in the comment index, but it tokenises,
   so a comment merely *containing* the accountId as text (an audit log, say)

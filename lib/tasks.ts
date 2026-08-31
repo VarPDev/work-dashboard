@@ -76,6 +76,7 @@ function toDashboardItem(
           text: item.mention.mentionText,
           at: item.mention.mentionedAt,
           commentUrl: item.mention.commentUrl,
+          informational: item.mention.informational,
         }
       : null,
     overdue: isOverdue(item.issue, todayDate),
@@ -123,7 +124,11 @@ async function loadDashboard(user: SelectableUser): Promise<DashboardPayload> {
     generatedAt: new Date().toISOString(),
     totals: {
       assigned: items.filter((item) => item.kind === 'assigned').length,
-      mentions: items.filter((item) => item.kind === 'mention').length,
+      // A "fyi" mention is not work waiting for you, so it is counted apart
+      // rather than inflating the number the header leads with.
+      mentions: items.filter((item) => item.kind === 'mention' && !item.mention?.informational)
+        .length,
+      informational: items.filter((item) => item.mention?.informational).length,
       overdue: items.filter((item) => item.overdue).length,
     },
     items,
